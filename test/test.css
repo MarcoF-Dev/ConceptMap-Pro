@@ -1,0 +1,190 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  cursor: url(cursor_plus_thin.png) 8 8, auto;
+  height: 100vh;
+  font-family: sans-serif;
+}
+
+/* Icone generali */
+div:hover {
+  cursor: pointer;
+}
+span[class$="-icon"],
+.delete-btn,
+.arrowTrash-Icon {
+  position: absolute;
+  cursor: pointer;
+  z-index: 1000;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  font-size: 18px; /* icona più grande */
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+span[class$="-icon"]:hover,
+.delete-btn:hover,
+.form-icon:hover,
+.color-input:hover,
+.turn-icon:hover,
+.arrowTrash-Icon:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* Icone specifiche colore in base alla forma */
+.box-icon {
+  top: -50px;
+  left: -10px;
+  border: 2px solid red;
+  background-color: #ffcccc;
+  color: red;
+}
+
+.rectangle-icon {
+  top: -50px;
+  left: -10px;
+  border: 2px solid blue;
+  background-color: #cce5ff;
+  color: blue;
+}
+
+.circle-icon {
+  top: -50px;
+  left: calc(50% - 12px);
+  border: 2px solid green;
+  background-color: #ccffcc;
+  color: green;
+}
+
+.delete-btn {
+  top: -50px;
+  right: -20px;
+  border: 2px solid #999;
+  background-color: #f8f8f8;
+  color: #555;
+  position: absolute;
+}
+
+/* Linee e frecce */
+.line-icon,
+.form-icon {
+  border: 2px solid #666;
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 6px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+/* Box, Rectangle, Circle */
+.box {
+  height: 100px;
+  width: 100px;
+  border: 2px solid red;
+  background-color: red;
+  position: absolute;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.rectangle {
+  width: 150px;
+  height: 100px;
+  border: 2px solid blue;
+  background-color: lightblue;
+  position: absolute;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.circle {
+  width: 100px;
+  height: 100px;
+  border: 2px solid green;
+  background-color: lightgreen;
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Link freccia lunga */
+.long-arrow-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  font-family: sans-serif;
+}
+
+.long-arrow-link svg {
+  display: block;
+}
+svg:hover {
+  cursor: pointer;
+}
+.container {
+  height: auto;
+  position: relative;
+}
+.color-input {
+  transition: all 0.2s ease;
+  position: absolute;
+  width: 36px; /* leggermente più grande per uniformità */
+  height: 36px;
+  padding: 6px;
+  border: 2px solid #666; /* simile alle altre icone */
+  border-radius: 6px;
+  background-color: #f0f0f0; /* sfondo come .line-icon/.form-icon */
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s, border-color 0.2s;
+  -webkit-appearance: none; /* rimuove stile default in Safari/Chrome */
+  -moz-appearance: none;
+  appearance: none;
+  top: -60px;
+  left: -25px;
+}
+.turn-icon {
+  position: absolute;
+
+  border: 2px solid orange; /* colore del bordo */
+  background-color: #ffe5b4; /* sfondo leggermente arancione chiaro */
+  color: orange; /* colore dell'icona */
+  padding: 6px;
+  border-radius: 6px;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  font-size: 18px; /* dimensione dell'icona */
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.turn-right {
+  top: -60px;
+  left: 60px;
+}
+.turn-left {
+  top: -60px;
+  left: +15px;
+}
+.arrowTrash-Icon {
+  top: -60px;
+  left: 100px;
+  border: 2px solid #999;
+  background-color: #f8f8f8;
+  color: #555;
+  transition: all 0.2s ease;
+}
