@@ -10,9 +10,13 @@ body {
   height: 100vh;
   font-family: sans-serif;
 }
-
+#drawSection {
+  height: 100vh;
+  margin-left: 70px;
+  width: calc(100vw - 70px);
+}
 /* Icone generali */
-div:hover {
+#drawSection div:hover {
   cursor: pointer;
 }
 span[class$="-icon"],
@@ -119,7 +123,7 @@ span[class$="-icon"]:hover,
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Link freccia lunga */
+/* Stile freccia lunga */
 .long-arrow-link {
   display: inline-flex;
   align-items: center;
@@ -128,14 +132,65 @@ span[class$="-icon"]:hover,
   color: #007bff;
   font-weight: bold;
   font-family: sans-serif;
+  transition: all 0.2s ease;
+  position: relative;
+  padding: 8px 16px; /* spazio per le frecce */
 }
 
 .long-arrow-link svg {
   display: block;
 }
-svg:hover {
-  cursor: pointer;
+.long-arrow-link::after,
+.long-arrow-link::before {
+  width: 12px; /* lunghezza segmento */
+  height: 12px;
+  content: "";
+  position: absolute;
+
+  pointer-events: none;
 }
+.long-arrow-link::before {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+.long-arrow-link::after {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+.long-arrow-link::after,
+.long-arrow-link::before {
+  border-top: 3px solid transparent;
+  border-left: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-right: 3px solid transparent;
+}
+
+.long-arrow-link:hover::after {
+  border-bottom: 3px solid orange;
+  border-right: 3px solid orange;
+}
+.long-arrow-link:hover::before {
+  border-top: 3px solid orange;
+  border-left: 3px solid orange;
+}
+.long-arrow-link:hover::after,
+.long-arrow-link:hover::before {
+  animation: flash 0.7s infinite forwards;
+}
+
+@keyframes flash {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .container {
   height: auto;
   position: relative;
@@ -156,7 +211,7 @@ svg:hover {
   -moz-appearance: none;
   appearance: none;
   top: -60px;
-  left: -25px;
+  left: 0px;
 }
 .turn-icon {
   position: absolute;
@@ -174,17 +229,128 @@ svg:hover {
 }
 .turn-right {
   top: -60px;
-  left: 60px;
+  left: 85px;
 }
 .turn-left {
   top: -60px;
-  left: +15px;
+  left: 40px;
 }
 .arrowTrash-Icon {
   top: -60px;
-  left: 100px;
+  left: 125px;
   border: 2px solid #999;
   background-color: #f8f8f8;
   color: #555;
   transition: all 0.2s ease;
+}
+/* Sidebar */
+/* Sidebar */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 70px;
+  height: 100vh;
+  background: #1e1e1e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+}
+
+/* Lista icone */
+#sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Ogni icona */
+.sidebarIcon {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 22px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+#uploadIcon {
+  position: absolute;
+  bottom: 26px;
+  left: 10px;
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  color: #aaa;
+  font-size: 22px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+/* Hover */
+.sidebarIcon:hover {
+  background: rgba(255, 165, 0, 0.15);
+  color: orange;
+  transform: scale(1.05);
+}
+
+/* Stato attivo (se lo userai con JS) */
+.sidebarIcon.active {
+  background: orange;
+  color: #fff;
+}
+
+.rectangle::after,
+.rectangle::before,
+.box::after,
+.box::before,
+.circle::after,
+.circle::before {
+  width: 12px;
+  height: 12px;
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-top: 3px solid transparent;
+  border-left: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-right: 3px solid transparent;
+}
+
+.rectangle::before,
+.box::before,
+.circle::before {
+  top: -10px;
+  left: -10px;
+}
+
+.rectangle::after,
+.box::after,
+.circle::after {
+  bottom: -10px;
+  right: -10px;
+}
+
+.rectangle:hover::after,
+.box:hover::after,
+.circle:hover::after {
+  border-bottom: 3px solid orange;
+  border-right: 3px solid orange;
+  animation: flash 0.7s infinite forwards;
+}
+
+.rectangle:hover::before,
+.box:hover::before,
+.circle:hover::before {
+  border-top: 3px solid orange;
+  border-left: 3px solid orange;
+  animation: flash 0.7s infinite forwards;
 }
