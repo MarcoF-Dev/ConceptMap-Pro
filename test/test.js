@@ -96,7 +96,7 @@ function showShapeControls(div, e) {
   // Se i controlli sono già visibili, nascondili
   if (div.querySelector(".delete-btn")) {
     const existingControls = div.querySelectorAll(
-      ".delete-btn, .box-icon, .rectangle-icon, .circle-icon, .text-icon"
+      ".delete-btn, .box-icon, .rectangle-icon, .circle-icon, .text-icon, .plus-icon, .minus-icon"
     );
     existingControls.forEach((control) => control.remove());
     return;
@@ -238,15 +238,49 @@ function showShapeControls(div, e) {
     e.stopPropagation();
     div.remove();
   });
+
+  const plusIcon = document.createElement("span");
+  plusIcon.innerHTML = `<i class="ri-add-line"></i>`;
+  plusIcon.classList.add("plus-icon");
+  div.appendChild(plusIcon);
+
+  plusIcon.addEventListener("click", (e) => {
+    // Logica per aggiungere una nuova forma
+    let currentHeight = parseInt(window.getComputedStyle(div).height);
+    let currentWidth = parseInt(window.getComputedStyle(div).width);
+
+    // Aggiungo 10px
+    div.style.height = currentHeight + 10 + "px";
+    div.style.width = currentWidth + 10 + "px";
+  });
+
+  const minusIcon = document.createElement("span");
+  minusIcon.innerHTML = `<i class="ri-subtract-line"></i>`;
+  minusIcon.classList.add("minus-icon");
+  div.appendChild(minusIcon);
+
+  minusIcon.addEventListener("click", (e) => {
+    let currentHeight = parseInt(window.getComputedStyle(div).height);
+    let currentWidth = parseInt(window.getComputedStyle(div).width);
+
+    // Sottraggo 10px (con un limite minimo di 20px per evitare scomparsa)
+    div.style.height = Math.max(currentHeight - 10, 20) + "px";
+    div.style.width = Math.max(currentWidth - 10, 20) + "px";
+    // Logica per rimuovere una forma
+  });
 }
 
 // Funzione per aggiungere testo a una forma
 function addTextToShape(div) {
   // Rimuovi controlli esistenti
-  const existingControls = div.querySelectorAll(
-    ".delete-btn, .box-icon, .rectangle-icon, .circle-icon, .text-icon"
-  );
-  existingControls.forEach((control) => control.remove());
+  if (div.querySelector(".shape-text")) {
+    const existingControls = div.querySelectorAll(
+      ".delete-btn, .box-icon, .rectangle-icon, .circle-icon, .text-icon, .plus-icon, .minus-icon"
+    );
+    existingControls.forEach((control) => control.remove());
+
+    return;
+  }
 
   // Crea elemento di testo
   const textElement = document.createElement("textarea");
@@ -258,8 +292,9 @@ function addTextToShape(div) {
 
   // Auto-resize del testo
   textElement.addEventListener("input", function () {
-    this.style.height = "auto";
-    this.style.height = this.scrollHeight + "px";
+    textElement.style.height = "auto";
+
+    textElement.style.height = textElement.scrollHeight + "px";
   });
 
   // Focus sul testo

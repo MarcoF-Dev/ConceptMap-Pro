@@ -91,6 +91,24 @@ span[class$="-icon"]:hover,
   color: #555;
   position: absolute;
 }
+.plus-icon {
+  top: 35%;
+
+  right: -50px;
+  border: 2px solid #999;
+  background-color: #f8f8f8;
+  color: #555;
+  position: absolute;
+}
+.minus-icon {
+  top: 35%;
+
+  left: -50px;
+  border: 2px solid #999;
+  background-color: #f8f8f8;
+  color: #555;
+  position: absolute;
+}
 
 /* Linee e frecce */
 .line-icon,
@@ -136,13 +154,13 @@ span[class$="-icon"]:hover,
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .shape-text {
-  position: absolute;
-  left: 0;
-  top: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  height: 50%; /* verrà gestita in JS per auto-resize */
-  min-height: 48px;
-  max-height: 70vh; /* non superare viewport */
+  height: auto; /* verrà gestita in JS per auto-resize */
+  max-width: 100%;
+  max-height: 100%; /* non superare viewport */
   display: block;
   box-sizing: border-box;
   border: none;
@@ -150,26 +168,27 @@ span[class$="-icon"]:hover,
   background: transparent; /* colore preso dalla forma */
   color: #111;
   caret-color: #111;
-  font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
-    "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: "poppins", sans-serif;
   font-weight: 600;
   /* Scala su schermi piccoli/grandi mantenendo leggibilità */
-  font-size: clamp(14px, 1.1vw, 18px);
+  font-size: 1.5rem;
   line-height: 1.25;
   letter-spacing: 0.2px;
 
   /* Impostazioni di testo tipiche per mappe concettuali */
   text-align: center; /* centrato orizzontalmente */
   white-space: pre-wrap;
-  word-break: break-word;
-  overflow: hidden; /* niente scrollbar finché possibile */
-  resize: none; /* blocca maniglia di resize manuale */
+  resize: none;
+  overflow: hidden;
 
   /* Allineamento con forma */
   padding: 6px 8px; /* margine interno del testo */
   border-radius: inherit; /* combacia con forma (utile per cerchi) */
 
   /* Evita che clic rapidi trascinino il testo */
+}
+.shape-text::placeholder {
+  font-size: 14px;
 }
 
 /* Stile freccia lunga */
