@@ -136,6 +136,10 @@ function showShapeControls(div, e) {
     div.appendChild(textIcon);
 
     textIcon.addEventListener("click", (e) => {
+      if (div.querySelector(".shape-text")) {
+        div.querySelector(".shape-text").remove();
+        return;
+      }
       e.stopPropagation();
       addTextToShape(div);
     });
@@ -173,6 +177,10 @@ function showShapeControls(div, e) {
     div.appendChild(textIcon);
 
     textIcon.addEventListener("click", (e) => {
+      if (div.querySelector(".shape-text")) {
+        div.querySelector(".shape-text").remove();
+        return;
+      }
       e.stopPropagation();
       addTextToShape(div);
     });
@@ -211,6 +219,10 @@ function showShapeControls(div, e) {
     div.appendChild(textIcon);
 
     textIcon.addEventListener("click", (e) => {
+      if (div.querySelector(".shape-text")) {
+        div.querySelector(".shape-text").remove();
+        return;
+      }
       e.stopPropagation();
       addTextToShape(div);
     });
@@ -368,13 +380,19 @@ document.addEventListener("mousedown", (event) => {
   }
 });
 
+let initialRotation = 0;
 // Funzione per mostrare i controlli delle frecce
 function showArrowControls(lineArrow, e) {
+  console.log("Mostra controlli freccia");
   // Rimuovi controlli esistenti
+
   const existingControls = lineArrow.querySelectorAll(
     ".color-input, .arrowTrash-Icon, .turn-icon"
   );
-  existingControls.forEach((control) => control.remove());
+  if (existingControls.length > 0) {
+    existingControls.forEach((control) => control.remove());
+    return;
+  }
 
   // Aggiungi color picker
   const colorInput = document.createElement("input");
@@ -419,7 +437,7 @@ function showArrowControls(lineArrow, e) {
   turnRight.classList.add("turn-icon");
   turnRight.classList.add("turn-right");
 
-  let rotation = 0;
+  let rotation = initialRotation;
   let rotateInterval = null;
 
   turnLeft.addEventListener("mousedown", (e) => {
@@ -441,6 +459,7 @@ function showArrowControls(lineArrow, e) {
 
   turnLeft.addEventListener("mouseleave", (e) => {
     clearInterval(rotateInterval);
+    initialRotation = rotation;
   });
 
   turnRight.addEventListener("mousedown", (e) => {
@@ -461,6 +480,7 @@ function showArrowControls(lineArrow, e) {
 
   turnRight.addEventListener("mouseleave", (e) => {
     clearInterval(rotateInterval);
+    initialRotation = rotation;
   });
 }
 
