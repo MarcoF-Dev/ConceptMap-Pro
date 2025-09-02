@@ -1,0 +1,236 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container principale */
+.design-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: white;
+  overflow-x: hidden;
+}
+
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #18181b;
+}
+#logo {
+  height: 75px;
+}
+.logo h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  color: #2563eb; /* blu */
+}
+
+.nav-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 24px;
+  align-items: center;
+}
+
+.nav-links a {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #3f3f46;
+  margin-right: 16px;
+  text-decoration: none;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.nav-links a:last-child {
+  margin-right: 0;
+}
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  display: block;
+  width: 0%;
+  height: 0.175px;
+  background: #2563eb;
+  transform: scaleX(0);
+  transition: transform 0.2s;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+  transform: scaleX(1);
+}
+.nav-links a:hover {
+  color: #2564eb;
+}
+.starterBtn {
+  min-width: 84px;
+  padding: 0.625rem 1.25rem;
+  height: 40px;
+  background-color: #2563eb;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: "Poppins", sans-serif;
+}
+
+.starterBtn:hover {
+  background-color: #1d4ed8;
+}
+
+/* Bottoni */
+/* Bottone "magico" Intelligent Map */
+.btn-magic {
+  min-width: 84px;
+  padding: 0.75rem 1.5rem;
+  height: 48px;
+  background: linear-gradient(135deg, #7c3aed, #3b82f6); /* viola → azzurro */
+  color: white;
+  font-weight: 500;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #9d4edd, #60a5fa);
+}
+
+.btn-magic:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+.btn-secondary {
+  min-width: 84px;
+  padding: 0.75rem 1.5rem;
+  height: 48px;
+  background-color: white;
+  border: 2px solid #d4d4d8; /* grigio chiaro */
+  color: #18181b;
+  font-weight: 600;
+  font-size: 1.05rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
+  font-family: "poppins", sans-serif;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.btn-secondary:hover {
+  background-color: #f4f4f5; /* grigio molto chiaro */
+  border-color: #a1a1aa; /* bordo leggermente più scuro */
+  transform: translateY(-1px);
+}
+
+/* Sezione principale */
+.main-section {
+  display: flex;
+  justify-content: center;
+  padding: 64px 16px;
+  flex-grow: 1;
+}
+
+.hero {
+  max-width: 800px;
+  width: 100%;
+  background: #fafafa;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #18181b;
+}
+
+.hero-content p {
+  font-size: 1.125rem;
+  color: #52525b;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+
+/* Footer */
+.footer {
+  border-top: 1px solid #e4e4e7;
+  padding: 48px 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  justify-content: center;
+}
+
+.footer-links a {
+  color: #52525b;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: #18181b;
+}
+
+.footer p {
+  color: #71717a;
+  font-size: 1rem;
+}
