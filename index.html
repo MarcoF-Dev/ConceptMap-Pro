@@ -10,7 +10,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
     />
     <title>ConceptMap Pro</title>
-    <link href="Logo.png" rel="icon" type="image/x-icon" />
+    <link href="assets/Logo.png" rel="icon" type="image/x-icon" />
     <meta charset="utf-8" />
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -21,7 +21,7 @@
           <!-- HEADER -->
           <header class="header">
             <div class="logo">
-              <img src="Logo.png" id="logo" alt="" />
+              <img src="assets/Logo.png" id="logo" alt="" />
               <h2>ConceptMap Pro</h2>
             </div>
             <div class="nav-actions">
@@ -43,7 +43,7 @@
                 <p>Create manual or intelligent concept maps from your texts</p>
               </div>
               <div class="hero-buttons">
-                <button class="btn-magic">
+                <button class="btn-magic" id="magicBtn">
                   <i class="ri-sparkling-line"></i> Intelligent Map
                 </button>
                 <button class="btn-secondary" id="manualBtn">
@@ -171,6 +171,172 @@
         </div>
       </div>
     </section>
+    <section id="magicMapPage">
+      <div id="headerMagic">
+        <h1>
+          <h1>Crea la tua mappa intelligente</h1>
+          <p class="subtitle">
+            Genera automaticamente una mappa concettuale a partire dal tuo
+            testo!
+          </p>
+        </h1>
+      </div>
+      <div id="magicCard">
+        <h2>Inserisci testo da analizzare</h2>
+        <div id="textareaContainer"><textarea id="magicText"></textarea></div>
+        <div id="modelSection">
+          <h2>Seleziona il modello</h2>
+          <div id="modelContainer">
+            <!-- Modello Radiale -->
+            <div class="modelCard" data-model="radiale">
+              <svg viewBox="0 0 200 200" class="modelSvg">
+                <!-- Linee -->
+                <line
+                  x1="100"
+                  y1="100"
+                  x2="100"
+                  y2="30"
+                  stroke="#555"
+                  stroke-width="2"
+                />
+                <line
+                  x1="100"
+                  y1="100"
+                  x2="170"
+                  y2="100"
+                  stroke="#555"
+                  stroke-width="2"
+                />
+                <line
+                  x1="100"
+                  y1="100"
+                  x2="30"
+                  y2="100"
+                  stroke="#555"
+                  stroke-width="2"
+                />
+                <line
+                  x1="100"
+                  y1="100"
+                  x2="100"
+                  y2="170"
+                  stroke="#555"
+                  stroke-width="2"
+                />
+                <!-- Nodi -->
+                <circle cx="100" cy="100" r="20" fill="#007bff" />
+                <circle cx="100" cy="30" r="12" fill="#6c757d" />
+                <circle cx="170" cy="100" r="12" fill="#6c757d" />
+                <circle cx="30" cy="100" r="12" fill="#6c757d" />
+                <circle cx="100" cy="170" r="12" fill="#6c757d" />
+              </svg>
+              <p>Radiale</p>
+            </div>
+
+            <!-- Modello Lineare -->
+            <div class="modelCard" data-model="lineare">
+              <svg viewBox="0 0 200 200" class="modelSvg">
+                <!-- Linee -->
+                <line
+                  x1="40"
+                  y1="100"
+                  x2="100"
+                  y2="100"
+                  stroke="#555"
+                  stroke-width="2"
+                />
+                <line
+                  x1="100"
+                  y1="100"
+                  x2="160"
+                  y2="100"
+                  stroke="#555"
+                  stroke-width="2"
+                />
+                <!-- Nodi -->
+                <rect
+                  x="20"
+                  y="85"
+                  width="40"
+                  height="30"
+                  fill="#28a745"
+                  rx="4"
+                />
+                <rect
+                  x="80"
+                  y="85"
+                  width="40"
+                  height="30"
+                  fill="#28a745"
+                  rx="4"
+                />
+                <rect
+                  x="140"
+                  y="85"
+                  width="40"
+                  height="30"
+                  fill="#28a745"
+                  rx="4"
+                />
+              </svg>
+              <p>Lineare</p>
+            </div>
+
+            <!-- Modello Gerarchica -->
+            <div class="modelCard" data-model="gerarchica">
+              <svg viewBox="0 0 200 200" class="modelSvg">
+                <!-- Linee -->
+                <line
+                  x1="100"
+                  y1="50"
+                  x2="60"
+                  y2="120"
+                  stroke="#555"
+                  stroke-width="2"
+                />
+                <line
+                  x1="100"
+                  y1="50"
+                  x2="140"
+                  y2="120"
+                  stroke="#555"
+                  stroke-width="2"
+                />
+                <!-- Nodi -->
+                <rect
+                  x="80"
+                  y="30"
+                  width="40"
+                  height="30"
+                  fill="#ffc107"
+                  rx="4"
+                />
+                <rect
+                  x="40"
+                  y="120"
+                  width="40"
+                  height="30"
+                  fill="#ffc107"
+                  rx="4"
+                />
+                <rect
+                  x="120"
+                  y="120"
+                  width="40"
+                  height="30"
+                  fill="#ffc107"
+                  rx="4"
+                />
+              </svg>
+              <p>Gerarchica</p>
+            </div>
+          </div>
+        </div>
+        <button id="magicCardBtn"><i class="ri-magic-line"></i> Crea</button>
+      </div>
+      <button id="magicBtnHome"><i class="ri-home-2-line"></i> Home</button>
+    </section>
+
     <script src="script.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>

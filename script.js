@@ -2,6 +2,13 @@ const manualBtn = document.getElementById("manualBtn");
 const manualSection = document.getElementById("manualMapPage");
 const homeBtn = document.getElementById("returnHome");
 const drawingSection = document.getElementById("drawSection");
+const magicBtn = document.getElementById("magicBtn");
+const magicSection = document.getElementById("magicMapPage");
+
+magicBtn.addEventListener("click", () => {
+  magicSection.classList.add("active");
+  mainSection.classList.remove("active");
+});
 
 const mainSection = document.getElementById("mainPage");
 manualBtn.addEventListener("click", () => {
@@ -896,5 +903,24 @@ confirmFastMapBtn.addEventListener("click", () => {
 
   numInput.forEach((input) => {
     input.value = 1;
+  });
+});
+
+// MAGIC MAP
+const modelCards = document.querySelectorAll(".modelCard");
+const magicBtnHome = document.getElementById("magicBtnHome");
+magicBtnHome.addEventListener("click", () => {
+  magicSection.classList.remove("active");
+  mainSection.classList.add("active");
+  modelCards.forEach((card) => {
+    card.classList.remove("active");
+  });
+});
+
+modelCards.forEach((card) => {
+  card.addEventListener("click", () => {
+    modelCards.forEach((c) => c.classList.remove("active"));
+    card.classList.add("active");
+    console.log("Modello selezionato:", card.dataset.model);
   });
 });
