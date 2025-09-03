@@ -1,4 +1,7 @@
 /* Reset */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -111,17 +114,6 @@ span[class$="-icon"]:hover,
 }
 
 /* Linee e frecce */
-.line-icon,
-.form-icon {
-  border: 2px solid #666;
-  background-color: #f0f0f0;
-  color: #333;
-  padding: 6px;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-  font-size: 18px;
-  transition: all 0.3s ease;
-}
 
 /* Box, Rectangle, Circle */
 .box {
@@ -153,12 +145,16 @@ span[class$="-icon"]:hover,
   border-radius: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+.shape.selectedShape,
+.text-div.selectedShape {
+  outline: 3px dashed #4a90e2; /* blu */
+  outline-offset: 4px;
+}
 .shape-text {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: absolute;
+  top: 25%;
   width: 100%;
-  height: auto; /* verrà gestita in JS per auto-resize */
+  height: 75%; /* verrà gestita in JS per auto-resize */
   max-width: 100%;
   max-height: 100%; /* non superare viewport */
   display: block;
@@ -183,12 +179,25 @@ span[class$="-icon"]:hover,
 
   /* Allineamento con forma */
   padding: 6px 8px; /* margine interno del testo */
-  border-radius: inherit; /* combacia con forma (utile per cerchi) */
+  /* combacia con forma (utile per cerchi) */
 
   /* Evita che clic rapidi trascinino il testo */
 }
 .shape-text::placeholder {
   font-size: 14px;
+}
+.text-div {
+  min-width: 100px;
+  padding: 8px;
+  border: 2px solid #333;
+  border-radius: 6px;
+  background-color: #fff;
+  font-size: 16px;
+  font-family: "poppins", sans-serif;
+  cursor: text;
+  z-index: 100;
+
+  color: #111;
 }
 
 /* Stile freccia lunga */
@@ -323,6 +332,7 @@ span[class$="-icon"]:hover,
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   padding: 15px 0;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.25);
   z-index: 1000;
@@ -352,9 +362,9 @@ span[class$="-icon"]:hover,
   transition: all 0.25s ease;
 }
 #uploadIcon {
-  position: absolute;
-  bottom: 26px;
-  left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 45px;
   height: 45px;
   border-radius: 12px;
@@ -362,6 +372,9 @@ span[class$="-icon"]:hover,
   font-size: 22px;
   cursor: pointer;
   transition: all 0.25s ease;
+}
+#uploadIcon:hover {
+  background-color: rgba(128, 128, 128, 0.1);
 }
 /* Hover */
 .sidebarIcon:hover {

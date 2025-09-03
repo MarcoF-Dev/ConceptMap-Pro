@@ -1,6 +1,19 @@
 const drawingSection = document.getElementById("drawSection");
 const sidebarIcon = document.querySelectorAll(".sidebarIcon");
-let activeIconId = "addIcon"; // Inizialmente attiva l'icona add
+const uploadIcon = document.getElementById("uploadIcon");
+// Screen in png di drawingSection
+uploadIcon.addEventListener("click", () => {
+  html2canvas(drawingSection).then((canvas) => {
+    const link = document.createElement("a");
+    link.download = "screenshot.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
+});
+let activeIconId = "squareIcon"; // Inizialmente attiva l'icona add
+
+let selectedShapeA = null;
+let selectedShapeB = null;
 
 // Gestione click delle icone della sidebar
 sidebarIcon.forEach((icon) => {
@@ -18,6 +31,33 @@ sidebarIcon.forEach((icon) => {
 
     // Aggiorna la modalità delle forme esistenti
     updateExistingShapesMode();
+
+    if (activeIconId === "linkIcon") {
+      Toastify({
+        text: "Seleziona 2 forme per collegarle",
+        duration: 2500,
+        gravity: "top", // top o bottom
+        position: "right", // left, center, right
+        style: {
+          background: "#2563eb",
+          fontFamily: "'Poppins', sans-serif",
+        },
+      }).showToast();
+    } else if (activeIconId === "dragIcon") {
+      drawingSection.style.cursor = "grab";
+      Toastify({
+        text: "Premi su una forma per trascinarla",
+        duration: 2500,
+        gravity: "top", // top o bottom
+        position: "right", // left, center, right
+        style: {
+          background: "#2563eb",
+          fontFamily: "'Poppins', sans-serif",
+        },
+      }).showToast();
+    } else {
+      drawingSection.style.cursor = "";
+    }
   });
 });
 
@@ -68,6 +108,7 @@ function updateExistingShapesMode() {
 // Funzione per creare forme direttamente
 function createShape(shapeType, x, y) {
   const div = document.createElement("div");
+  div.classList.add("shape");
 
   if (shapeType === "box") {
     div.classList.add("box");
@@ -87,12 +128,21 @@ function createShape(shapeType, x, y) {
 
   // Aggiungi event listener per il click per mostrare sempre i controlli
   div.addEventListener("click", (e) => {
-    showShapeControls(div, e);
+    if (
+      !e.target.closest(".minus-icon") &&
+      !e.target.closest(".plus-icon") &&
+      activeIconId !== "linkIcon" &&
+      activeIconId !== "dragIcon"
+    ) {
+      console.log(e.target);
+      showShapeControls(div, e);
+    }
   });
 }
 
 // Funzione per mostrare i controlli delle forme
 function showShapeControls(div, e) {
+  console.log(activeIconId);
   // Se i controlli sono già visibili, nascondili
   if (div.querySelector(".delete-btn")) {
     const existingControls = div.querySelectorAll(
@@ -291,11 +341,6 @@ function addTextToShape(div) {
   div.appendChild(textElement);
 
   // Auto-resize del testo
-  textElement.addEventListener("input", function () {
-    textElement.style.height = "auto";
-
-    textElement.style.height = textElement.scrollHeight + "px";
-  });
 
   // Focus sul testo
   textElement.focus();
@@ -313,83 +358,51 @@ function addTextToShape(div) {
 }
 
 // Funzione per rendere un elemento trascinabile
-function makeDraggable(div) {
-  let offsetX = 0;
-  let offsetY = 0;
-  let isDragging = false;
 
-  div.addEventListener("mousedown", (e) => {
-    if (activeIconId === "dragIcon") {
-      isDragging = true;
-      offsetX = e.clientX - div.offsetLeft;
-      offsetY = e.clientY - div.offsetTop;
-      div.style.cursor = "grabbing";
-    }
-  });
+let draggingShape = null;
+let offsetX = 0;
+let offsetY = 0;
 
-  document.addEventListener("mousemove", (e) => {
-    if (!isDragging || activeIconId !== "dragIcon") {
+// Inizio drag
+function makeDraggable(shape) {
+  shape.addEventListener("mousedown", (e) => {
+    if (activeIconId !== "dragIcon") {
+      shape.style.cursor = "pointer";
       return;
     }
-    div.style.left = `${e.clientX - offsetX}px`;
-    div.style.top = `${e.clientY - offsetY}px`;
-  });
+    shape.style.cursor = "grabbing";
 
-  document.addEventListener("mouseup", () => {
-    if (isDragging) {
-      isDragging = false;
-      div.style.cursor = "grab";
-    }
+    draggingShape = shape;
+    offsetX = e.clientX - shape.offsetLeft;
+    offsetY = e.clientY - shape.offsetTop;
+
+    let moved = false;
+
+    const mouseMoveHandler = (eMove) => {
+      moved = true;
+      shape.style.left = `${eMove.clientX - offsetX}px`;
+      shape.style.top = `${eMove.clientY - offsetY}px`;
+      updateConnectionsForShape(draggingShape);
+    };
+
+    const mouseUpHandler = () => {
+      document.removeEventListener("mousemove", mouseMoveHandler);
+      document.removeEventListener("mouseup", mouseUpHandler);
+      if (!moved) showShapeControls(shape, e);
+    };
+
+    document.addEventListener("mousemove", mouseMoveHandler);
+    document.addEventListener("mouseup", mouseUpHandler);
+
+    e.stopPropagation();
   });
 }
 
 // Gestione del click principale
-document.addEventListener("mousedown", (event) => {
-  // Solo se addIcon è attiva, mostra le icone temporanee
-  if (activeIconId === "addIcon") {
-    if (event.target === drawingSection) {
-      const x = event.clientX;
-      const y = event.clientY;
-
-      const lineIcon = document.createElement("span");
-      lineIcon.innerHTML = `<i class="ri-arrow-right-line"></i>`;
-      lineIcon.classList.add("line-icon");
-      drawingSection.appendChild(lineIcon);
-      lineIcon.style.left = `${x}px`;
-      lineIcon.style.top = `${y}px`;
-      lineIcon.style.position = "absolute";
-
-      const form = document.createElement("div");
-      form.classList.add("form-icon");
-      form.innerHTML = `<i class="ri-square-line"></i>`;
-      drawingSection.appendChild(form);
-      form.style.left = `calc(${x}px + 50px)`;
-      form.style.top = `${y}px`;
-      form.style.position = "absolute";
-
-      lineIcon.addEventListener("click", (e) => {
-        const newX = event.clientX;
-        const newY = event.clientY;
-        e.stopPropagation();
-        lineIcon.remove();
-        form.remove();
-        createArrow(newX, newY);
-      });
-
-      form.addEventListener("click", (e) => {
-        const newX = e.clientX;
-        const newY = e.clientY;
-        form.remove();
-        lineIcon.remove();
-        createShape("box", newX, newY);
-      });
-    }
-  }
-});
 
 // Gestione del click per creazione diretta delle forme
 document.addEventListener("mousedown", (event) => {
-  if (event.target === drawingSection) {
+  if (event.target === drawingSection && event.button === 0) {
     const x = event.clientX;
     const y = event.clientY;
 
@@ -405,20 +418,37 @@ document.addEventListener("mousedown", (event) => {
     } else if (activeIconId === "textIcon") {
       // Creazione diretta del testo
       createTextElement(x, y);
-    } else if (activeIconId === "cornerIconRight") {
-      // Creazione curva destra
-      createCornerCurve(x, y, "right");
-    } else if (activeIconId === "cornerIconLeft") {
-      // Creazione curva sinistra
-      createCornerCurve(x, y, "left");
+    }
+  }
+  if (
+    event.target.classList.contains("shape") ||
+    event.target.classList.contains("text-div")
+  ) {
+    if (activeIconId === "linkIcon") {
+      if (!selectedShapeA) {
+        // Primo click -> selezione A
+        selectedShapeA = event.target;
+        selectedShapeA.classList.add("selectedShape");
+      } else if (!selectedShapeB && event.target !== selectedShapeA) {
+        // Secondo click -> selezione B
+        selectedShapeB = event.target;
+        selectedShapeB.classList.add("selectedShape");
+
+        // Collega
+        connectShapes(selectedShapeA, selectedShapeB);
+
+        // Reset
+        selectedShapeA.classList.remove("selectedShape");
+        selectedShapeB.classList.remove("selectedShape");
+        selectedShapeA = null;
+        selectedShapeB = null;
+      }
     }
   }
 });
 
-let initialRotation = 0;
 // Funzione per mostrare i controlli delle frecce
 function showArrowControls(lineArrow, e) {
-  console.log("Mostra controlli freccia");
   // Rimuovi controlli esistenti
 
   const existingControls = lineArrow.querySelectorAll(
@@ -427,6 +457,10 @@ function showArrowControls(lineArrow, e) {
   if (existingControls.length > 0) {
     existingControls.forEach((control) => control.remove());
     return;
+  }
+
+  if (lineArrow.rotation === undefined) {
+    lineArrow.rotation = 0;
   }
 
   // Aggiungi color picker
@@ -472,51 +506,38 @@ function showArrowControls(lineArrow, e) {
   turnRight.classList.add("turn-icon");
   turnRight.classList.add("turn-right");
 
-  let rotation = initialRotation;
   let rotateInterval = null;
 
   turnLeft.addEventListener("mousedown", (e) => {
     e.stopPropagation();
     // Ruota di -2 gradi ogni 20ms
     rotateInterval = setInterval(() => {
-      rotation -= 2;
+      lineArrow.rotation -= 2;
       const svg = lineArrow.querySelector("svg");
       if (svg) {
-        svg.style.transform = `rotate(${rotation}deg)`;
-        svg.style.transformOrigin = "0, 50%";
+        svg.style.transform = `rotate(${lineArrow.rotation}deg)`;
+        svg.style.transformOrigin = "50%, 50%";
       }
     }, 20);
-  });
-
-  turnLeft.addEventListener("mouseup", (e) => {
-    clearInterval(rotateInterval);
-  });
-
-  turnLeft.addEventListener("mouseleave", (e) => {
-    clearInterval(rotateInterval);
-    initialRotation = rotation;
   });
 
   turnRight.addEventListener("mousedown", (e) => {
     e.stopPropagation();
     rotateInterval = setInterval(() => {
-      rotation += 2;
+      lineArrow.rotation += 2;
       const svg = lineArrow.querySelector("svg");
       if (svg) {
-        svg.style.transform = `rotate(${rotation}deg)`;
-        svg.style.transformOrigin = "0, 50%";
+        svg.style.transform = `rotate(${lineArrow.rotation}deg)`;
+        svg.style.transformOrigin = "50%, 50%";
       }
     }, 20);
   });
 
-  turnRight.addEventListener("mouseup", (e) => {
-    clearInterval(rotateInterval);
-  });
-
-  turnRight.addEventListener("mouseleave", (e) => {
-    clearInterval(rotateInterval);
-    initialRotation = rotation;
-  });
+  const stopRotation = () => clearInterval(rotateInterval);
+  turnLeft.addEventListener("mouseup", stopRotation);
+  turnLeft.addEventListener("mouseleave", stopRotation);
+  turnRight.addEventListener("mouseup", stopRotation);
+  turnRight.addEventListener("mouseleave", stopRotation);
 }
 
 // Funzione per creare elementi di testo
@@ -524,19 +545,13 @@ function createTextElement(x, y) {
   const textDiv = document.createElement("div");
   textDiv.contentEditable = true;
   textDiv.textContent = "Testo";
+  textDiv.t = "Testo";
   textDiv.style.position = "absolute";
   textDiv.style.left = `${x}px`;
   textDiv.style.top = `${y}px`;
   textDiv.style.transform = "translate(-50%, -50%)";
-  textDiv.style.minWidth = "100px";
-  textDiv.style.padding = "8px";
-  textDiv.style.border = "2px solid #333";
-  textDiv.style.borderRadius = "6px";
-  textDiv.style.backgroundColor = "#fff";
-  textDiv.style.fontSize = "16px";
-  textDiv.style.fontFamily = "Arial, sans-serif";
-  textDiv.style.cursor = "text";
-  textDiv.style.zIndex = "100";
+
+  textDiv.classList.add("text-div");
 
   drawingSection.appendChild(textDiv);
 
@@ -545,10 +560,8 @@ function createTextElement(x, y) {
 
   // Aggiungi event listener per il click (solo in modalità cursor)
   textDiv.addEventListener("click", (e) => {
-    if (activeIconId === "cursorIcon") {
-      e.stopPropagation();
-      showTextControls(textDiv, e);
-    }
+    e.stopPropagation();
+    showTextControls(textDiv, e);
   });
 
   // Aggiungi drag and drop se è attiva l'icona drag
@@ -558,14 +571,18 @@ function createTextElement(x, y) {
 }
 
 // Funzione per mostrare i controlli del testo
-function showTextControls(textDiv, e) {
+function showTextControls(textDiv) {
   // Rimuovi controlli esistenti
-  const existingControls = textDiv.querySelectorAll(".delete-btn");
-  existingControls.forEach((control) => control.remove());
+  if (textDiv.querySelector(".delete-btn")) {
+    const existingControls = textDiv.querySelectorAll(".delete-btn");
+    existingControls.forEach((control) => control.remove());
+    return;
+  }
 
   const deleteBtn = document.createElement("span");
   deleteBtn.innerHTML = `<i class="ri-delete-bin-line"></i>`;
   deleteBtn.classList.add("delete-btn");
+  deleteBtn.contentEditable = false;
   deleteBtn.style.top = "-50px";
   deleteBtn.style.right = "-20px";
   textDiv.appendChild(deleteBtn);
@@ -603,70 +620,79 @@ function createArrow(x, y) {
 
   // Aggiungi event listener per il click
   lineArrow.addEventListener("click", (e) => {
-    showArrowControls(lineArrow, e);
+    if (!e.target.closest(".turn-right") && !e.target.closest(".turn-left")) {
+      showArrowControls(lineArrow, e);
+    }
   });
 }
 
-// Funzione per creare curve angolari
-function createCornerCurve(x, y, direction) {
-  const curveDiv = document.createElement("div");
-  curveDiv.style.position = "absolute";
-  curveDiv.style.left = `${x}px`;
-  curveDiv.style.top = `${y}px`;
-  curveDiv.style.transform = "translate(-50%, -50%)";
-  curveDiv.style.width = "80px";
-  curveDiv.style.height = "80px";
+const connections = []; // Array di collegamenti {from, to, line}
 
-  // Crea SVG per la curva
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("width", "80");
-  svg.setAttribute("height", "80");
-  svg.setAttribute("viewBox", "0 0 80 80");
+function connectShapes(divA, divB) {
+  const svg = document.getElementById("connections");
 
-  let path;
-  if (direction === "right") {
-    path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path.setAttribute("d", "M 10 10 L 70 10 L 70 70");
-    path.setAttribute("stroke", "#333");
-    path.setAttribute("stroke-width", "3");
-    path.setAttribute("fill", "none");
-  } else {
-    path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path.setAttribute("d", "M 70 10 L 10 10 L 10 70");
-    path.setAttribute("stroke", "#333");
-    path.setAttribute("stroke-width", "3");
-    path.setAttribute("fill", "none");
-  }
+  // Crea una linea
+  const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  line.setAttribute("stroke", "black");
+  line.setAttribute("stroke-width", "2");
+  svg.appendChild(line);
 
-  svg.appendChild(path);
-  curveDiv.appendChild(svg);
+  // Salva connessione
+  connections.push({ from: divA, to: divB, line });
 
-  drawingSection.appendChild(curveDiv);
-
-  // Rendi sempre trascinabile
-  makeDraggable(curveDiv);
-
-  // Aggiungi event listener per il click
-  curveDiv.addEventListener("click", (e) => {
-    showCurveControls(curveDiv, e);
-  });
+  // Aggiorna subito la posizione
+  updateLine(divA, divB, line);
+  divA.classList.remove("selectedShape");
+  divB.classList.remove("selectedShape");
 }
 
-// Funzione per mostrare i controlli delle curve
-function showCurveControls(curveDiv, e) {
-  // Rimuovi controlli esistenti
-  const existingControls = curveDiv.querySelectorAll(".delete-btn");
-  existingControls.forEach((control) => control.remove());
+// Aggiorna la posizione di una linea
+function updateLine(divA, divB, line) {
+  const rectA = divA.getBoundingClientRect();
+  const rectB = divB.getBoundingClientRect();
 
-  const deleteBtn = document.createElement("span");
-  deleteBtn.innerHTML = `<i class="ri-delete-bin-line"></i>`;
-  deleteBtn.classList.add("delete-btn");
-  deleteBtn.style.top = "-50px";
-  deleteBtn.style.right = "-20px";
-  curveDiv.appendChild(deleteBtn);
+  // Centri
+  const x1 = rectA.left + rectA.width / 2;
+  const y1 = rectA.top + rectA.height / 2;
+  const x2 = rectB.left + rectB.width / 2;
+  const y2 = rectB.top + rectB.height / 2;
 
-  deleteBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    curveDiv.remove();
+  // Calcola il punto sul bordo di A più vicino a B
+  const pointA = getIntersectionPoint(rectA, x2, y2);
+  // Calcola il punto sul bordo di B più vicino a A
+  const pointB = getIntersectionPoint(rectB, x1, y1);
+
+  // Aggiorna linea
+  line.setAttribute("x1", pointA.x);
+  line.setAttribute("y1", pointA.y);
+  line.setAttribute("x2", pointB.x);
+  line.setAttribute("y2", pointB.y);
+}
+
+function getIntersectionPoint(rect, targetX, targetY) {
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  const dx = targetX - cx;
+  const dy = targetY - cy;
+
+  // Rapporto necessario per uscire dal rettangolo
+  const scaleX = dx !== 0 ? rect.width / 2 / Math.abs(dx) : Infinity;
+  const scaleY = dy !== 0 ? rect.height / 2 / Math.abs(dy) : Infinity;
+
+  const scale = Math.min(scaleX, scaleY);
+
+  return {
+    x: cx + dx * scale,
+    y: cy + dy * scale,
+  };
+}
+
+// Quando sposti una forma, aggiorna le linee collegate
+function updateConnectionsForShape(div) {
+  connections.forEach((conn) => {
+    if (conn.from === div || conn.to === div) {
+      updateLine(conn.from, conn.to, conn.line);
+    }
   });
 }

@@ -7,21 +7,31 @@
     <link rel="stylesheet" href="test.css" />
     <link
       rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <link
+      rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
     />
   </head>
   <body>
-    <div id="drawSection"></div>
+    <div id="drawSection">
+      <svg
+        id="connections"
+        style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+        "
+      ></svg>
+    </div>
     <div id="sidebar">
       <ul>
         <li>
-          <div id="addIcon" class="sidebarIcon active">
-            <i class="ri-add-line"></i>
-          </div>
-        </li>
-
-        <li>
-          <div id="squareIcon" class="sidebarIcon">
+          <div id="squareIcon" class="sidebarIcon active">
             <i class="ri-square-line"></i>
           </div>
         </li>
@@ -40,20 +50,20 @@
             <i class="ri-arrow-right-long-line"></i>
           </div>
         </li>
-        <li>
-          <div id="cornerIconRight" class="sidebarIcon">
-            <i class="ri-corner-right-down-line"></i>
-          </div>
-        </li>
-        <li>
-          <div id="cornerIconLeft" class="sidebarIcon">
-            <i class="ri-corner-left-down-line"></i>
-          </div>
-        </li>
 
         <li>
           <div id="dragIcon" class="sidebarIcon">
             <i class="ri-drag-move-line"></i>
+          </div>
+        </li>
+        <li>
+          <div id="textIcon" class="sidebarIcon">
+            <i class="ri-text"></i>
+          </div>
+        </li>
+        <li>
+          <div id="linkIcon" class="sidebarIcon">
+            <i class="ri-links-line"></i>
           </div>
         </li>
       </ul>
@@ -63,5 +73,7 @@
       </div>
     </div>
     <script src="test.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   </body>
 </html>
