@@ -2,10 +2,8 @@
   <head>
     <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
     <link
-      as="style"
-      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
-      onload="this.rel='stylesheet'"
       rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
     />
     <link
       rel="stylesheet"
@@ -17,52 +15,165 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="design-root">
-      <div class="layout-container">
-        <!-- HEADER -->
-        <header class="header">
-          <div class="logo">
-            <img src="Logo.png" id="logo" alt="" />
-            <h2>ConceptMap Pro</h2>
-          </div>
-          <div class="nav-actions">
-            <nav class="nav-links">
-              <a href="#"><i class="ri-home-2-line"></i> Home</a>
-              <a href="#"><i class="ri-information-line"></i> About</a>
-              <a href="#"><i class="ri-mail-line"></i> Contact</a>
-            </nav>
-            <button class="starterBtn">Get Started</button>
-          </div>
-        </header>
-
-        <!-- MAIN -->
-        <main class="main-section">
-          <div class="hero">
-            <div class="hero-content">
-              <h1>ConceptMap Pro</h1>
-              <p>Create manual or intelligent concept maps from your texts</p>
+    <section id="mainPage" class="active">
+      <div class="design-root">
+        <div class="layout-container">
+          <!-- HEADER -->
+          <header class="header">
+            <div class="logo">
+              <img src="Logo.png" id="logo" alt="" />
+              <h2>ConceptMap Pro</h2>
             </div>
-            <div class="hero-buttons">
-              <button class="btn-magic">
-                <i class="ri-sparkling-line"></i> Intelligent Map
-              </button>
-              <button class="btn-secondary">
-                <i class="ri-map-line"></i> Manual Map
+            <div class="nav-actions">
+              <nav class="nav-links">
+                <a href="#"><i class="ri-home-2-line"></i> Home</a>
+                <a href="#"><i class="ri-information-line"></i> About</a>
+              </nav>
+              <button class="starterBtn">
+                <i class="ri-mail-line"></i> Contact
               </button>
             </div>
-          </div>
-        </main>
+          </header>
 
-        <!-- FOOTER -->
-        <footer class="footer">
-          <div class="footer-links">
-            <a href="#">Terms of Service</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Contact Us</a>
-          </div>
-          <p>© 2024 ConceptMap Pro. All rights reserved.</p>
-        </footer>
+          <!-- MAIN -->
+          <main class="main-section">
+            <div class="hero">
+              <div class="hero-content">
+                <h1>ConceptMap Pro</h1>
+                <p>Create manual or intelligent concept maps from your texts</p>
+              </div>
+              <div class="hero-buttons">
+                <button class="btn-magic">
+                  <i class="ri-sparkling-line"></i> Intelligent Map
+                </button>
+                <button class="btn-secondary" id="manualBtn">
+                  <i class="ri-map-line"></i> Manual Map
+                </button>
+              </div>
+            </div>
+          </main>
+
+          <!-- FOOTER -->
+          <footer class="footer">
+            <p>© 2024 ConceptMap Pro. All rights reserved.</p>
+          </footer>
+        </div>
       </div>
-    </div>
+    </section>
+    <section id="manualMapPage">
+      <header>
+        <h1>Crea la tua mappa concettuale</h1>
+        <p class="subtitle">
+          Organizza visivamente idee, concetti e relazioni in modo semplice e
+          intuitivo.
+        </p>
+      </header>
+      <div id="drawSection">
+        <svg
+          id="connections"
+          style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+          "
+        ></svg>
+      </div>
+      <div id="sidebar">
+        <ul>
+          <li>
+            <div id="squareIcon" class="sidebarIcon active">
+              <i class="ri-square-line"></i>
+            </div>
+          </li>
+          <li>
+            <div id="rectangleIcon" class="sidebarIcon">
+              <i class="ri-rectangle-line"></i>
+            </div>
+          </li>
+          <li>
+            <div id="circleIcon" class="sidebarIcon">
+              <i class="ri-circle-line"></i>
+            </div>
+          </li>
+          <li>
+            <div id="arrowIcon" class="sidebarIcon">
+              <i class="ri-arrow-right-long-line"></i>
+            </div>
+          </li>
+
+          <li>
+            <div id="dragIcon" class="sidebarIcon">
+              <i class="ri-drag-move-line"></i>
+            </div>
+          </li>
+          <li>
+            <div id="textIcon" class="sidebarIcon">
+              <i class="ri-text"></i>
+            </div>
+          </li>
+          <li>
+            <div id="linkIcon" class="sidebarIcon">
+              <i class="ri-links-line"></i>
+            </div>
+          </li>
+          <li>
+            <div id="trashIcon" class="sidebarIcon">
+              <i class="ri-delete-bin-line"></i>
+            </div>
+          </li>
+        </ul>
+
+        <div id="uploadIcon">
+          <i class="ri-upload-line"></i>
+        </div>
+      </div>
+      <button id="fastMap"><i class="ri-flashlight-line"></i> Fast map</button>
+      <button id="returnHome"><i class="ri-home-2-line"></i> Home</button>
+
+      <div id="fastMapCard" class="fast-map-card">
+        <h2>Crea forme velocemente</h2>
+        <label>
+          Quadrati:
+          <input
+            type="number"
+            class="numInput"
+            id="numBoxes"
+            min="0"
+            value="1"
+          />
+        </label>
+        <label>
+          Rettangoli:
+          <input
+            type="number"
+            class="numInput"
+            id="numRectangles"
+            min="0"
+            value="1"
+          />
+        </label>
+        <label>
+          Cerchi:
+          <input
+            type="number"
+            class="numInput"
+            id="numCircles"
+            min="0"
+            value="1"
+          />
+        </label>
+        <div class="fast-map-buttons">
+          <button id="confirmFastMap">Conferma</button>
+          <button id="closeFastMap">Chiudi</button>
+        </div>
+      </div>
+    </section>
+    <script src="script.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   </body>
 </html>

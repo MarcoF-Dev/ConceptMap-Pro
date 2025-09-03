@@ -1,4 +1,30 @@
+const manualBtn = document.getElementById("manualBtn");
+const manualSection = document.getElementById("manualMapPage");
+const homeBtn = document.getElementById("returnHome");
 const drawingSection = document.getElementById("drawSection");
+
+const mainSection = document.getElementById("mainPage");
+manualBtn.addEventListener("click", () => {
+  manualSection.classList.add("active");
+  mainSection.classList.remove("active");
+  drawingSection.innerHTML = `<svg
+          id="connections"
+          style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+          "
+        ></svg>`;
+  fastMapCard.classList.remove("compare");
+});
+homeBtn.addEventListener("click", () => {
+  manualSection.classList.remove("active");
+  mainSection.classList.add("active");
+});
+
 const sidebarIcon = document.querySelectorAll(".sidebarIcon");
 const uploadIcon = document.getElementById("uploadIcon");
 // Screen in png di drawingSection
@@ -37,9 +63,9 @@ sidebarIcon.forEach((icon) => {
         text: "Seleziona 2 forme per collegarle",
         duration: 2500,
         gravity: "top", // top o bottom
-        position: "right", // left, center, right
+        position: "left", // left, center, right
         style: {
-          background: "#2563eb",
+          background: "linear-gradient(90deg, #60a5fa 0%, #9d4edd 100%)",
           fontFamily: "'Poppins', sans-serif",
         },
       }).showToast();
@@ -49,12 +75,25 @@ sidebarIcon.forEach((icon) => {
         text: "Premi su una forma per trascinarla",
         duration: 2500,
         gravity: "top", // top o bottom
-        position: "right", // left, center, right
+        position: "left", // left, center, right
         style: {
-          background: "#2563eb",
+          background: "linear-gradient(90deg, #60a5fa 0%, #9d4edd 100%)",
           fontFamily: "'Poppins', sans-serif",
         },
       }).showToast();
+    } else if (activeIconId === "trashIcon") {
+      drawingSection.innerHTML = ` <svg
+          id="connections"
+          style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+          "
+        ></svg>`;
+      drawingSection.style.cursor = "default";
     } else {
       drawingSection.style.cursor = "";
     }
@@ -142,13 +181,13 @@ function createShape(shapeType, x, y) {
 
 // Funzione per mostrare i controlli delle forme
 function showShapeControls(div, e) {
-  console.log(activeIconId);
   // Se i controlli sono già visibili, nascondili
   if (div.querySelector(".delete-btn")) {
     const existingControls = div.querySelectorAll(
       ".delete-btn, .box-icon, .rectangle-icon, .circle-icon, .text-icon, .plus-icon, .minus-icon"
     );
     existingControls.forEach((control) => control.remove());
+
     return;
   }
 
@@ -163,6 +202,8 @@ function showShapeControls(div, e) {
       e.stopPropagation();
       div.classList.remove("box");
       div.classList.add("rectangle");
+      div.style.height = "100px";
+      div.style.width = "150px";
       showShapeControls(div, e);
     });
 
@@ -176,6 +217,8 @@ function showShapeControls(div, e) {
       e.stopPropagation();
       div.classList.remove("box");
       div.classList.add("circle");
+      div.style.height = "100px";
+      div.style.width = "100px";
       showShapeControls(div, e);
     });
 
@@ -204,6 +247,8 @@ function showShapeControls(div, e) {
       e.stopPropagation();
       div.classList.remove("rectangle");
       div.classList.add("box");
+      div.style.height = "100px";
+      div.style.width = "100px";
       showShapeControls(div, e);
     });
 
@@ -217,6 +262,8 @@ function showShapeControls(div, e) {
       e.stopPropagation();
       div.classList.remove("rectangle");
       div.classList.add("circle");
+      div.style.height = "100px";
+      div.style.width = "100px";
       showShapeControls(div, e);
     });
 
@@ -245,6 +292,8 @@ function showShapeControls(div, e) {
       e.stopPropagation();
       div.classList.remove("circle");
       div.classList.add("box");
+      div.style.height = "100px";
+      div.style.width = "100px";
       showShapeControls(div, e);
     });
 
@@ -259,6 +308,8 @@ function showShapeControls(div, e) {
       e.stopPropagation();
       div.classList.remove("circle");
       div.classList.add("rectangle");
+      div.style.height = "100px";
+      div.style.width = "150px";
       showShapeControls(div, e);
     });
 
@@ -286,6 +337,7 @@ function showShapeControls(div, e) {
 
   deleteBtn.addEventListener("click", (e) => {
     e.stopPropagation();
+    deleteLine(div);
     div.remove();
   });
 
@@ -302,6 +354,7 @@ function showShapeControls(div, e) {
     // Aggiungo 10px
     div.style.height = currentHeight + 10 + "px";
     div.style.width = currentWidth + 10 + "px";
+    updateConnectionsForShape(div);
   });
 
   const minusIcon = document.createElement("span");
@@ -316,6 +369,7 @@ function showShapeControls(div, e) {
     // Sottraggo 10px (con un limite minimo di 20px per evitare scomparsa)
     div.style.height = Math.max(currentHeight - 10, 20) + "px";
     div.style.width = Math.max(currentWidth - 10, 20) + "px";
+    updateConnectionsForShape(div);
     // Logica per rimuovere una forma
   });
 }
@@ -344,17 +398,6 @@ function addTextToShape(div) {
 
   // Focus sul testo
   textElement.focus();
-
-  // Aggiungi pulsante elimina
-  const deleteBtn = document.createElement("span");
-  deleteBtn.innerHTML = `<i class="ri-delete-bin-line"></i>`;
-  deleteBtn.classList.add("delete-btn");
-  div.appendChild(deleteBtn);
-
-  deleteBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    div.remove();
-  });
 }
 
 // Funzione per rendere un elemento trascinabile
@@ -388,7 +431,6 @@ function makeDraggable(shape) {
     const mouseUpHandler = () => {
       document.removeEventListener("mousemove", mouseMoveHandler);
       document.removeEventListener("mouseup", mouseUpHandler);
-      if (!moved) showShapeControls(shape, e);
     };
 
     document.addEventListener("mousemove", mouseMoveHandler);
@@ -403,8 +445,8 @@ function makeDraggable(shape) {
 // Gestione del click per creazione diretta delle forme
 document.addEventListener("mousedown", (event) => {
   if (event.target === drawingSection && event.button === 0) {
-    const x = event.clientX;
-    const y = event.clientY;
+    let x = event.clientX;
+    let y = event.clientY;
 
     if (activeIconId === "squareIcon") {
       createShape("box", x, y);
@@ -425,6 +467,16 @@ document.addEventListener("mousedown", (event) => {
     event.target.classList.contains("text-div")
   ) {
     if (activeIconId === "linkIcon") {
+      if (event.target == selectedShapeA) {
+        event.target.classList.remove("selectedShape");
+        selectedShapeA = null;
+        return;
+      }
+      if (event.target == selectedShapeB) {
+        event.target.classList.remove("selectedShape");
+        selectedShapeB = null;
+        return;
+      }
       if (!selectedShapeA) {
         // Primo click -> selezione A
         selectedShapeA = event.target;
@@ -438,6 +490,23 @@ document.addEventListener("mousedown", (event) => {
         connectShapes(selectedShapeA, selectedShapeB);
 
         // Reset
+        selectedShapeA.classList.remove("selectedShape");
+        selectedShapeB.classList.remove("selectedShape");
+        selectedShapeA = null;
+        selectedShapeB = null;
+      }
+    }
+  } else if (event.target.tagName === "TEXTAREA") {
+    // Se clicchi sulla textarea, seleziona il padre (la forma)
+    const parent = event.target.parentElement;
+    if (activeIconId === "linkIcon" && parent) {
+      if (!selectedShapeA) {
+        selectedShapeA = parent;
+        selectedShapeA.classList.add("selectedShape");
+      } else if (!selectedShapeB && parent !== selectedShapeA) {
+        selectedShapeB = parent;
+        selectedShapeB.classList.add("selectedShape");
+        connectShapes(selectedShapeA, selectedShapeB);
         selectedShapeA.classList.remove("selectedShape");
         selectedShapeB.classList.remove("selectedShape");
         selectedShapeA = null;
@@ -560,8 +629,10 @@ function createTextElement(x, y) {
 
   // Aggiungi event listener per il click (solo in modalità cursor)
   textDiv.addEventListener("click", (e) => {
-    e.stopPropagation();
-    showTextControls(textDiv, e);
+    if (activeIconId !== "linkIcon" && activeIconId !== "dragIcon") {
+      showTextControls(textDiv, e);
+      e.stopPropagation();
+    } else return;
   });
 
   // Aggiungi drag and drop se è attiva l'icona drag
@@ -590,6 +661,7 @@ function showTextControls(textDiv) {
   deleteBtn.addEventListener("click", (e) => {
     e.stopPropagation();
     textDiv.remove();
+    deleteLine(textDiv);
   });
 }
 
@@ -627,8 +699,28 @@ function createArrow(x, y) {
 }
 
 const connections = []; // Array di collegamenti {from, to, line}
+function deleteLine(div) {
+  connections
+    .filter((conn) => conn.from === div || conn.to === div)
+    .forEach((conn) => {
+      if (conn.line && conn.line.parentNode) {
+        conn.line.parentNode.removeChild(conn.line);
+      }
+    });
 
+  // Rimuovi le connessioni dall'array
+  for (let i = connections.length - 1; i >= 0; i--) {
+    if (connections[i].from === div || connections[i].to === div) {
+      connections.splice(i, 1);
+    }
+  }
+
+  // Reset selezione se necessario
+  if (selectedShapeA === div) selectedShapeA = null;
+  if (selectedShapeB === div) selectedShapeB = null;
+}
 function connectShapes(divA, divB) {
+  if (!divA.parentNode || !divB.parentNode) return;
   const svg = document.getElementById("connections");
 
   // Crea una linea
@@ -651,22 +743,48 @@ function updateLine(divA, divB, line) {
   const rectA = divA.getBoundingClientRect();
   const rectB = divB.getBoundingClientRect();
 
-  // Centri
-  const x1 = rectA.left + rectA.width / 2;
-  const y1 = rectA.top + rectA.height / 2;
   const x2 = rectB.left + rectB.width / 2;
   const y2 = rectB.top + rectB.height / 2;
+  const x1 = rectA.left + rectA.width / 2;
+  const y1 = rectA.top + rectA.height / 2;
 
-  // Calcola il punto sul bordo di A più vicino a B
-  const pointA = getIntersectionPoint(rectA, x2, y2);
-  // Calcola il punto sul bordo di B più vicino a A
-  const pointB = getIntersectionPoint(rectB, x1, y1);
+  // Punto sul bordo di A
+  let pointA;
+  if (divA.classList.contains("circle")) {
+    pointA = getCircleIntersection(rectA, x2, y2);
+  } else {
+    pointA = getIntersectionPoint(rectA, x2, y2);
+  }
+
+  // Punto sul bordo di B
+  let pointB;
+  if (divB.classList.contains("circle")) {
+    pointB = getCircleIntersection(rectB, x1, y1);
+  } else {
+    pointB = getIntersectionPoint(rectB, x1, y1);
+  }
 
   // Aggiorna linea
   line.setAttribute("x1", pointA.x);
   line.setAttribute("y1", pointA.y);
   line.setAttribute("x2", pointB.x);
   line.setAttribute("y2", pointB.y);
+}
+
+// Funzione per calcolare intersezione con il cerchio
+function getCircleIntersection(rect, targetX, targetY) {
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const r = rect.width / 2; // assumendo cerchio perfetto (width = height)
+
+  const dx = targetX - cx;
+  const dy = targetY - cy;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+
+  return {
+    x: cx + (dx / dist) * r,
+    y: cy + (dy / dist) * r,
+  };
 }
 
 function getIntersectionPoint(rect, targetX, targetY) {
@@ -696,3 +814,87 @@ function updateConnectionsForShape(div) {
     }
   });
 }
+
+// Fast map function
+const fastBtn = document.getElementById("fastMap");
+
+const fastMapCard = document.getElementById("fastMapCard");
+const closeFastMapBtn = document.getElementById("closeFastMap");
+const confirmFastMapBtn = document.getElementById("confirmFastMap");
+
+fastBtn.addEventListener("click", () => {
+  fastMapCard.classList.contains("compare")
+    ? fastMapCard.classList.remove("compare")
+    : fastMapCard.classList.add("compare");
+});
+
+closeFastMapBtn.addEventListener("click", () => {
+  fastMapCard.classList.remove("compare");
+});
+
+confirmFastMapBtn.addEventListener("click", () => {
+  const numInput = document.querySelectorAll(".numInput");
+  fastMapCard.classList.remove("compare");
+  let numBoxes = parseInt(document.getElementById("numBoxes").value) || 0;
+  let numRectangles =
+    parseInt(document.getElementById("numRectangles").value) || 0;
+  let numCircles = parseInt(document.getElementById("numCircles").value) || 0;
+
+  if (numBoxes > 12) {
+    numBoxes = 12;
+    Toastify({
+      text: "Quantita massima quadrati: 12",
+      duration: 2500,
+      gravity: "top", // top o bottom
+      position: "left", // left, center, right
+      style: {
+        background: "red",
+        fontFamily: "'Poppins', sans-serif",
+      },
+    }).showToast();
+  }
+  if (numRectangles > 9) {
+    numRectangles = 9;
+    Toastify({
+      text: "Quantita massima rettangoli: 9",
+      duration: 2500,
+      gravity: "top", // top o bottom
+      position: "left", // left, center, right
+      style: {
+        background: "red",
+        fontFamily: "'Poppins', sans-serif",
+      },
+    }).showToast();
+  }
+  if (numCircles > 12) {
+    numCircles = 9;
+    Toastify({
+      text: "Quantita massima cerchi: 9",
+      duration: 2500,
+      gravity: "top", // top o bottom
+      position: "left", // left, center, right
+      style: {
+        background: "red",
+        fontFamily: "'Poppins', sans-serif",
+      },
+    }).showToast();
+  }
+  const xStart = 200;
+  let yStart = 200;
+
+  for (let i = 0; i < numBoxes; i++) {
+    createShape("box", xStart + i * 120, yStart);
+  }
+  yStart += 150;
+  for (let i = 0; i < numRectangles; i++) {
+    createShape("rectangle", xStart + i * 170, yStart);
+  }
+  yStart += 150;
+  for (let i = 0; i < numCircles; i++) {
+    createShape("circle", xStart + i * 120, yStart);
+  }
+
+  numInput.forEach((input) => {
+    input.value = 1;
+  });
+});

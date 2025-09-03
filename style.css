@@ -8,10 +8,14 @@ body {
   font-family: "poppins", sans-serif;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+}
+section:not(.active) {
+  display: none;
 }
 
 /* Container principale */
-.design-root {
+#mainPage .design-root {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -19,48 +23,48 @@ body {
   overflow-x: hidden;
 }
 
-.layout-container {
+#mainPage .layout-container {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
 /* Header */
-.header {
+#mainPage .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
 }
 
-.logo {
+#mainPage .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+
   color: #18181b;
 }
-#logo {
+#mainPage #logo {
   height: 75px;
 }
-.logo h2 {
+#mainPage .logo h2 {
   font-size: 1.25rem;
   font-weight: bold;
 }
 
-.icon {
+#mainPage .icon {
   width: 32px;
   height: 32px;
   color: #2563eb; /* blu */
 }
 
-.nav-actions {
+#mainPage .nav-actions {
   display: flex;
   justify-content: flex-end;
   gap: 24px;
   align-items: center;
 }
 
-.nav-links a {
+#mainPage .nav-links a {
   font-size: 1rem;
   font-weight: 500;
   color: #3f3f46;
@@ -70,10 +74,10 @@ body {
   position: relative;
 }
 
-.nav-links a:last-child {
+#mainPage.nav-links a:last-child {
   margin-right: 0;
 }
-.nav-links a::after {
+#mainPage .nav-links a::after {
   content: "";
   position: absolute;
   bottom: -4px;
@@ -86,20 +90,20 @@ body {
   transition: transform 0.2s;
 }
 
-.nav-links a:hover::after {
+#mainPage .nav-links a:hover::after {
   width: 100%;
   transform: scaleX(1);
 }
-.nav-links a:hover {
+#mainPage .nav-links a:hover {
   color: #2564eb;
 }
-.starterBtn {
+#mainPage .starterBtn {
   min-width: 84px;
   padding: 0.625rem 1.25rem;
   height: 40px;
   background-color: #2563eb;
   color: white;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 1rem;
   border: none;
   border-radius: 6px;
@@ -109,7 +113,7 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
-.starterBtn:hover {
+#mainPage .starterBtn:hover {
   background-color: #1d4ed8;
 }
 
@@ -159,7 +163,7 @@ body {
 }
 
 /* Sezione principale */
-.main-section {
+#mainPage .main-section {
   display: flex;
   justify-content: center;
   padding: 64px 16px;
@@ -203,7 +207,7 @@ body {
 }
 
 /* Footer */
-.footer {
+#mainPage .footer {
   border-top: 1px solid #e4e4e7;
   padding: 48px 16px;
   text-align: center;
@@ -212,25 +216,586 @@ body {
   gap: 24px;
 }
 
-.footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px 32px;
-  justify-content: center;
-}
-
-.footer-links a {
-  color: #52525b;
-  font-size: 1rem;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.footer-links a:hover {
-  color: #18181b;
-}
-
-.footer p {
+#mainPage .footer p {
   color: #71717a;
   font-size: 1rem;
+}
+
+/* MANUAL MAP!!!!!!!!!! */
+#manualMapPage {
+  position: relative;
+}
+#manualMapPage header {
+  width: calc(100vw - 70px);
+  margin-left: 70px;
+  text-align: center;
+  padding: 1rem 0;
+}
+#manualMapPage header h1 {
+  font-weight: 500;
+  font-size: 2rem;
+}
+#manualMapPage header .subtitle {
+  display: block;
+  margin-top: 10px;
+  font-size: 1.15rem;
+  color: #2563eb;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #60a5fa 0%, #9d4edd 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+}
+#returnHome {
+  min-width: 84px;
+  padding: 0.625rem 1.25rem;
+  height: 40px;
+  background-color: #2563eb;
+  color: white;
+  font-weight: 400;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: "Poppins", sans-serif;
+
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+}
+#returnHome:hover,
+#fastMap:hover {
+  background-color: #1d4ed8;
+}
+#fastMap {
+  min-width: 84px;
+  padding: 0.625rem 1.25rem;
+  height: 40px;
+  background-color: #2563eb;
+  color: white;
+  font-weight: 400;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: "Poppins", sans-serif;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+}
+#drawSection {
+  height: calc(100vh - 7.5rem);
+  margin-left: 70px;
+  width: calc(100vw - 70px);
+  cursor: url(cursor_plus_thin.png) 8 8, auto;
+  border: 1.5px solid #e0e7ff; /* azzurro molto chiaro */
+  box-shadow: 0 2px 8px rgba(96, 165, 250, 0.07); /* leggero blu */
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+/* Icone generali */
+#drawSection div:hover {
+  cursor: pointer;
+}
+span[class$="-icon"],
+.delete-btn,
+.arrowTrash-Icon {
+  position: absolute;
+  cursor: pointer;
+  z-index: 1000;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  font-size: 18px; /* icona più grande */
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+span[class$="-icon"]:hover,
+.delete-btn:hover,
+.form-icon:hover,
+.color-input:hover,
+.turn-icon:hover,
+.arrowTrash-Icon:hover,
+.text-icon:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* Icone specifiche colore in base alla forma */
+.box-icon {
+  top: -50px;
+  left: 10px;
+  border: 2px solid red;
+  background-color: #ffcccc;
+  color: red;
+  position: absolute;
+}
+
+.rectangle-icon {
+  top: -50px;
+  left: 10px;
+  border: 2px solid blue;
+  background-color: #cce5ff;
+  color: blue;
+  position: absolute;
+}
+
+.circle-icon {
+  top: -50px;
+  left: -30px;
+  border: 2px solid green;
+  background-color: #ccffcc;
+  color: green;
+  position: absolute;
+}
+
+.text-icon {
+  top: -50px;
+  right: 12px;
+  border: 2px solid #999;
+  background-color: #f8f8f8;
+  color: #555;
+  position: absolute;
+}
+
+.delete-btn {
+  top: -50px;
+  right: -30px;
+  border: 2px solid #999;
+  background-color: #f8f8f8;
+  color: #555;
+  position: absolute;
+}
+.plus-icon {
+  top: 35%;
+
+  right: -50px;
+  border: 2px solid #999;
+  background-color: #f8f8f8;
+  color: #555;
+  position: absolute;
+}
+.minus-icon {
+  top: 35%;
+
+  left: -50px;
+  border: 2px solid #999;
+  background-color: #f8f8f8;
+  color: #555;
+  position: absolute;
+}
+
+/* Linee e frecce */
+
+/* Box, Rectangle, Circle */
+.box {
+  height: 100px;
+  width: 100px;
+  border: 2px solid red;
+
+  position: absolute;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.rectangle {
+  width: 150px;
+  height: 100px;
+  border: 2px solid blue;
+
+  position: absolute;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.circle {
+  width: 100px;
+  height: 100px;
+  border: 2px solid green;
+
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.shape.selectedShape,
+.text-div.selectedShape {
+  outline: 3px dashed #4a90e2; /* blu */
+  outline-offset: 4px;
+}
+.shape-text {
+  position: absolute;
+  top: 25%;
+  width: 100%;
+  height: 75%; /* verrà gestita in JS per auto-resize */
+  max-width: 100%;
+  max-height: 100%; /* non superare viewport */
+  display: block;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  background: transparent; /* colore preso dalla forma */
+  color: #111;
+  caret-color: #111;
+  font-family: "poppins", sans-serif;
+  font-weight: 600;
+  /* Scala su schermi piccoli/grandi mantenendo leggibilità */
+  font-size: 1.5rem;
+  line-height: 1.25;
+  letter-spacing: 0.2px;
+
+  /* Impostazioni di testo tipiche per mappe concettuali */
+  text-align: center; /* centrato orizzontalmente */
+  white-space: pre-wrap;
+  resize: none;
+  overflow: hidden;
+
+  /* Allineamento con forma */
+  padding: 6px 8px; /* margine interno del testo */
+  /* combacia con forma (utile per cerchi) */
+
+  /* Evita che clic rapidi trascinino il testo */
+}
+.shape-text::placeholder {
+  font-size: 14px;
+}
+.text-div {
+  min-width: 100px;
+  padding: 8px;
+  border: 2px solid #333;
+  border-radius: 6px;
+  background-color: #fff;
+  font-size: 16px;
+  font-family: "poppins", sans-serif;
+  cursor: text;
+  z-index: 100;
+
+  color: #111;
+}
+
+/* Stile freccia lunga */
+.long-arrow-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  font-family: sans-serif;
+  transition: all 0.2s ease;
+  position: relative;
+  padding: 8px 16px; /* spazio per le frecce */
+}
+
+.long-arrow-link svg {
+  display: block;
+}
+.long-arrow-link::after,
+.long-arrow-link::before {
+  width: 12px; /* lunghezza segmento */
+  height: 12px;
+  content: "";
+  position: absolute;
+
+  pointer-events: none;
+}
+.long-arrow-link::before {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+.long-arrow-link::after {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+.long-arrow-link::after,
+.long-arrow-link::before {
+  border-top: 3px solid transparent;
+  border-left: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-right: 3px solid transparent;
+}
+
+.long-arrow-link:hover::after {
+  border-bottom: 3px solid orange;
+  border-right: 3px solid orange;
+}
+.long-arrow-link:hover::before {
+  border-top: 3px solid orange;
+  border-left: 3px solid orange;
+}
+.long-arrow-link:hover::after,
+.long-arrow-link:hover::before {
+  animation: flash 0.7s infinite forwards;
+}
+
+@keyframes flash {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.container {
+  height: auto;
+  position: relative;
+}
+.color-input {
+  transition: all 0.2s ease;
+  position: absolute;
+  width: 36px; /* leggermente più grande per uniformità */
+  height: 36px;
+  padding: 6px;
+  border: 2px solid #666; /* simile alle altre icone */
+  border-radius: 6px;
+  background-color: #f0f0f0; /* sfondo come .line-icon/.form-icon */
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s, border-color 0.2s;
+  -webkit-appearance: none; /* rimuove stile default in Safari/Chrome */
+  -moz-appearance: none;
+  appearance: none;
+  top: -60px;
+  left: 0px;
+}
+.turn-icon {
+  position: absolute;
+
+  border: 2px solid orange; /* colore del bordo */
+  background-color: #ffe5b4; /* sfondo leggermente arancione chiaro */
+  color: orange; /* colore dell'icona */
+  padding: 6px;
+  border-radius: 6px;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  font-size: 18px; /* dimensione dell'icona */
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.turn-right {
+  top: -60px;
+  left: 85px;
+}
+.turn-left {
+  top: -60px;
+  left: 40px;
+}
+.arrowTrash-Icon {
+  top: -60px;
+  left: 125px;
+  border: 2px solid #999;
+  background-color: #f8f8f8;
+  color: #555;
+  transition: all 0.2s ease;
+}
+/* Sidebar */
+/* Sidebar */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 70px;
+  height: 100vh;
+  background-color: white; /* viola → azzurro */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.18);
+  z-index: 1000;
+}
+
+/* Lista icone */
+#sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Ogni icona */
+.sidebarIcon {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2563eb; /* blu principale */
+  font-size: 22px;
+  cursor: pointer;
+  background: transparent;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.08);
+}
+#uploadIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  color: #2563eb;
+  font-size: 22px;
+  cursor: pointer;
+  background: transparent;
+  transition: all 0.25s ease;
+}
+#uploadIcon:hover {
+  background: linear-gradient(135deg, #60a5fa 60%, #9d4edd 100%);
+  color: #fff;
+}
+/* Hover */
+.sidebarIcon:hover {
+  background: linear-gradient(135deg, #60a5fa 60%, #9d4edd 100%);
+  color: #fff;
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.18);
+}
+
+/* Stato attivo (se lo userai con JS) */
+.sidebarIcon.active {
+  background: linear-gradient(135deg, #2563eb, #60a5fa);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
+}
+
+.rectangle::after,
+.rectangle::before,
+.box::after,
+.box::before,
+.circle::after,
+.circle::before {
+  width: 12px;
+  height: 12px;
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-top: 3px solid transparent;
+  border-left: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-right: 3px solid transparent;
+}
+
+.rectangle::before,
+.box::before,
+.circle::before {
+  top: -10px;
+  left: -10px;
+}
+
+.rectangle::after,
+.box::after,
+.circle::after {
+  bottom: -10px;
+  right: -10px;
+}
+
+.rectangle:hover::after,
+.box:hover::after,
+.circle:hover::after {
+  border-bottom: 3px solid orange;
+  border-right: 3px solid orange;
+  animation: flash 0.7s infinite forwards;
+}
+
+.rectangle:hover::before,
+.box:hover::before,
+.circle:hover::before {
+  border-top: 3px solid orange;
+  border-left: 3px solid orange;
+  animation: flash 0.7s infinite forwards;
+}
+
+/* Fast map */
+.fast-map-card {
+  position: fixed;
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, 100vh);
+  width: 320px;
+  background-color: #f8fafc;
+  border: 2px solid #2563eb;
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
+  font-family: "Poppins", sans-serif;
+  z-index: 2000;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+.fast-map-card.compare {
+  transform: translate(50%, -50%); /* centrata verticalmente */
+  opacity: 1;
+}
+
+.fast-map-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #60a5fa 0%, #9d4edd 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  font-weight: 500;
+}
+
+.fast-map-card label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.fast-map-card input[type="number"] {
+  width: 60px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: 2px solid #2563eb;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+}
+
+.fast-map-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.fast-map-buttons button {
+  min-width: 84px;
+  padding: 0.5rem 1rem;
+  height: 40px;
+  background-color: #2563eb;
+  color: white;
+  font-weight: 400;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: "Poppins", sans-serif;
+}
+
+.fast-map-buttons button:hover {
+  background-color: #1d4ed8;
 }
