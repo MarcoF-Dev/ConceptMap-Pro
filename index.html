@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <section id="mainPage" class="active">
+    <section id="mainPage" class="active pageSection">
       <div class="design-root">
         <div class="layout-container">
           <!-- HEADER -->
@@ -60,7 +60,7 @@
         </div>
       </div>
     </section>
-    <section id="manualMapPage">
+    <section id="manualMapPage" class="pageSection">
       <header>
         <h1>Crea la tua mappa concettuale</h1>
         <p class="subtitle">
@@ -171,7 +171,7 @@
         </div>
       </div>
     </section>
-    <section id="magicMapPage">
+    <section id="magicMapPage" class="pageSection">
       <div id="headerMagic">
         <h1>
           <h1>Crea la tua mappa intelligente</h1>
@@ -188,7 +188,7 @@
           <h2>Seleziona il modello</h2>
           <div id="modelContainer">
             <!-- Modello Radiale -->
-            <div class="modelCard" data-model="radiale">
+            <div class="modelCard" data-model="radiale" id="radiale">
               <svg viewBox="0 0 200 200" class="modelSvg">
                 <!-- Linee -->
                 <line
@@ -234,7 +234,7 @@
             </div>
 
             <!-- Modello Lineare -->
-            <div class="modelCard" data-model="lineare">
+            <div class="modelCard" data-model="lineare" id="lineare ">
               <svg viewBox="0 0 200 200" class="modelSvg">
                 <!-- Linee -->
                 <line
@@ -283,7 +283,7 @@
             </div>
 
             <!-- Modello Gerarchica -->
-            <div class="modelCard" data-model="gerarchica">
+            <div class="modelCard" data-model="gerarchica" id="gerarchica">
               <svg viewBox="0 0 200 200" class="modelSvg">
                 <!-- Linee -->
                 <line
@@ -337,9 +337,8 @@
       <button id="magicBtnHome"><i class="ri-home-2-line"></i> Home</button>
     </section>
 
-    <script src="script.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>

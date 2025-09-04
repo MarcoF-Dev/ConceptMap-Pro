@@ -1,19 +1,34 @@
 const manualBtn = document.getElementById("manualBtn");
-const manualSection = document.getElementById("manualMapPage");
+
 const homeBtn = document.getElementById("returnHome");
-const drawingSection = document.getElementById("drawSection");
+
 const magicBtn = document.getElementById("magicBtn");
-const magicSection = document.getElementById("magicMapPage");
+
+function showSection(sectionId) {
+  const allSection = document.querySelectorAll(".pageSection");
+
+  allSection.forEach((section) => {
+    section.classList.remove("active");
+  });
+  const target = document.getElementById(sectionId);
+  if (target) {
+    target.classList.add("active");
+  }
+}
 
 magicBtn.addEventListener("click", () => {
-  magicSection.classList.add("active");
-  mainSection.classList.remove("active");
+  showSection("magicMapPage");
+});
+manualBtn.addEventListener("click", () => {
+  showSection("manualMapPage");
+  cleanDrawingSection();
+});
+homeBtn.addEventListener("click", () => {
+  showSection("mainPage");
 });
 
-const mainSection = document.getElementById("mainPage");
-manualBtn.addEventListener("click", () => {
-  manualSection.classList.add("active");
-  mainSection.classList.remove("active");
+const drawingSection = document.getElementById("drawSection");
+function cleanDrawingSection() {
   drawingSection.innerHTML = `<svg
           id="connections"
           style="
@@ -26,11 +41,8 @@ manualBtn.addEventListener("click", () => {
           "
         ></svg>`;
   fastMapCard.classList.remove("compare");
-});
-homeBtn.addEventListener("click", () => {
-  manualSection.classList.remove("active");
-  mainSection.classList.add("active");
-});
+  drawingSection.style.cursor = "default";
+}
 
 const sidebarIcon = document.querySelectorAll(".sidebarIcon");
 const uploadIcon = document.getElementById("uploadIcon");
@@ -89,18 +101,7 @@ sidebarIcon.forEach((icon) => {
         },
       }).showToast();
     } else if (activeIconId === "trashIcon") {
-      drawingSection.innerHTML = ` <svg
-          id="connections"
-          style="
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-          "
-        ></svg>`;
-      drawingSection.style.cursor = "default";
+      cleanDrawingSection();
     } else {
       drawingSection.style.cursor = "";
     }
@@ -909,12 +910,13 @@ confirmFastMapBtn.addEventListener("click", () => {
 // MAGIC MAP
 const modelCards = document.querySelectorAll(".modelCard");
 const magicBtnHome = document.getElementById("magicBtnHome");
+const textarea = document.getElementById("magicText");
 magicBtnHome.addEventListener("click", () => {
-  magicSection.classList.remove("active");
-  mainSection.classList.add("active");
+  showSection("mainPage");
   modelCards.forEach((card) => {
     card.classList.remove("active");
   });
+  textarea.value = "";
 });
 
 modelCards.forEach((card) => {
@@ -924,3 +926,46 @@ modelCards.forEach((card) => {
     console.log("Modello selezionato:", card.dataset.model);
   });
 });
+
+//Create magic map
+
+const createMagicBtn = document.getElementById("magicCardBtn");
+createMagicBtn.addEventListener("click", checkCard);
+
+function checkCard() {
+  function createToast(text, color) {
+    Toastify({
+      text: text,
+      duration: 2500,
+      gravity: "top", // top o bottom
+      position: "left", // left, center, right
+      style: {
+        background: color,
+        fontFamily: "'Poppins', sans-serif",
+      },
+    }).showToast();
+  }
+
+  let modelValue = null;
+  const textValue = textarea.value.trim();
+
+  modelCards.forEach((model) => {
+    if (model.classList.contains("active")) {
+      modelValue = model.id;
+    }
+  });
+
+  if (!modelValue && !textValue) {
+    createToast("Inserisci testo e seleziona modello", "red");
+    return;
+  } else if (!modelValue && textValue) {
+    createToast("Seleziona modello", "red");
+
+    return;
+  } else if (modelValue && !textValue) {
+    createToast("Inserisci testo", "red");
+    return;
+  }
+
+  createToast("Invio testo per creazione mappa", "green");
+}
