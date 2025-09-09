@@ -22,14 +22,15 @@ const client = new PredictionServiceClient({
 });
 
 function buildPrompt(text, mapType) {
-  if (mapType == "radiale") {
-    return `Crea una mappa concettuale radiale. Nodo centrale principale e nodi secondari collegati. Restituisci JSON con nodes e links. Basati su questo testo ${text}`;
-  }
-  if (mapType == "lineare") {
-    return `Crea una mappa concettuale lineare, collegando i concetti in sequenza. Restituisci JSON con nodes e links. Basati su questo testo ${text}`;
-  }
-  if (mapType == "gerarchica") {
-    return `Crea una mappa concettuale gerarchica. Organizza i concetti per livelli: principale, secondario, terziario. Restituisci JSON con nodes, links e level. Basati su questo testo ${text}`;
+  switch (mapType) {
+    case "radiale":
+      return `Crea una mappa concettuale radiale. Nodo centrale principale e nodi secondari collegati. Restituisci JSON con nodes e links. Basati su questo testo ${text}`;
+    case "lineare":
+      return `Crea una mappa concettuale lineare, collegando i concetti in sequenza. Restituisci JSON con nodes e links. Basati su questo testo ${text}`;
+    case "gerarchica":
+      return `Crea una mappa concettuale gerarchica. Organizza i concetti per livelli: principale, secondario, terziario. Restituisci JSON con nodes, links e level. Basati su questo testo ${text}`;
+    default:
+      return "";
   }
 }
 
@@ -53,25 +54,35 @@ app.post("/generateMap", async (req, res) => {
     };
 
     const [response] = await client.predict(request);
+    const outputText = response.predictions[0]?.content || "";
 
-    let outputText = response.predictions[0].content || "";
+    // Log per debug
+    console.log("=== Output grezzo dal modello ===");
+    console.log(outputText);
+    console.log("=== Fine output ===");
 
     let jsonResult;
     try {
       jsonResult = JSON.parse(outputText);
-    } catch (err) {
-      return res.status(500).json({
-        error: "Il modello non ha restituito un JSON valido",
+    } catch {
+      // Se non è JSON valido, restituisci comunque il raw output
+      return res.status(200).json({
+        warning: "Il modello non ha restituito un JSON valido",
         rawOutput: outputText,
       });
     }
 
     res.json(jsonResult);
   } catch (error) {
-    console.error(error);
+    console.error("Errore interno server:", error);
     res
       .status(500)
       .json({ error: "Errore nel server", details: error.message });
+  } finally {
+    // Rimuove il file temporaneo della chiave
+    if (fs.existsSync(tempPath)) {
+      fs.unlinkSync(tempPath);
+    }
   }
 });
 

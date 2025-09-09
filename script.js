@@ -967,5 +967,42 @@ function checkCard() {
     return;
   }
 
-  createToast("Invio testo per creazione mappa", "green");
+  sendToGemini(textValue, modelValue);
+}
+
+async function sendToGemini(text, modelId) {
+  try {
+    const response = await fetch(
+      "https://conceptmap-pro.onrender.com/generateMap",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: text,
+          mapType: modelId, // 'radiale', 'lineare', 'gerarchica'
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Errore server: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("Risultato dal server:", data);
+
+    // Chiamata alla funzione che disegna la mappa
+  } catch (err) {
+    console.error(err);
+    Toastify({
+      text: "Errore nella generazione della mappa",
+      duration: 2500,
+      gravity: "top",
+      position: "left",
+      style: {
+        background: "red",
+        fontFamily: "'Poppins', sans-serif",
+      },
+    }).showToast();
+  }
 }
