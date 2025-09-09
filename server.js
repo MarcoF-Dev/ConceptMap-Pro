@@ -62,6 +62,7 @@ app.post("/generateMap", async (req, res) => {
     console.log("=== Fine output ===");
 
     let jsonResult;
+    console.log("[INFO] Output grezzo dal modello:", outputText);
     try {
       jsonResult = JSON.parse(outputText);
     } catch {

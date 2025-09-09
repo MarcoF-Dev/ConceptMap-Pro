@@ -965,3 +965,13 @@ span[class$="-icon"]:hover,
 #magicBtnHome:hover {
   background-color: #1d4ed8;
 }
+
+#logger {
+  height: 150px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-family: monospace;
+  background-color: #f9f9f9;
+  margin-top: 20px;
+}

@@ -971,6 +971,8 @@ function checkCard() {
 }
 
 async function sendToGemini(text, modelId) {
+  logEvent("info", "Invio richiesta a Gemini...", { text, modelId });
+
   try {
     const response = await fetch(
       "https://conceptmap-pro.onrender.com/generateMap",
@@ -985,15 +987,17 @@ async function sendToGemini(text, modelId) {
     );
 
     if (!response.ok) {
+      logEvent("error", `Errore server: ${response.status}`);
       throw new Error(`Errore server: ${response.status}`);
     }
 
     const data = await response.json();
-    console.log("Risultato dal server:", data);
+    logEvent("success", "Risposta ricevuta dal server", data);
 
-    // Chiamata alla funzione che disegna la mappa
+    // Qui puoi chiamare la funzione che disegna la mappa
+    // drawMap(data);
   } catch (err) {
-    console.error(err);
+    logEvent("error", "Errore nella generazione della mappa", err);
     Toastify({
       text: "Errore nella generazione della mappa",
       duration: 2500,
@@ -1005,4 +1009,29 @@ async function sendToGemini(text, modelId) {
       },
     }).showToast();
   }
+}
+
+function logEvent(type, message, data = null) {
+  const timestamp = new Date().toISOString();
+  const formatted = `[${timestamp}] [${type.toUpperCase()}] ${message}`;
+
+  // Scrive nella console
+  if (data) console.log(formatted, data);
+  else console.log(formatted);
+
+  // Scrive nel logger visivo
+  const loggerDiv = document.getElementById("logger");
+  const newLine = document.createElement("div");
+  newLine.textContent = data
+    ? `${formatted} ${JSON.stringify(data)}`
+    : formatted;
+
+  // Colore per tipo di log
+  if (type === "error") newLine.style.color = "red";
+  else if (type === "warn") newLine.style.color = "orange";
+  else if (type === "success") newLine.style.color = "green";
+  else newLine.style.color = "black";
+
+  loggerDiv.appendChild(newLine);
+  loggerDiv.scrollTop = loggerDiv.scrollHeight; // scorre in basso automaticamente
 }
