@@ -9,6 +9,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Attiva/disattiva il mock per testare senza consumare token
+const USE_MOCK = true;
+
 // Scrive la chiave in un file temporaneo
 const keyJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
 const tempPath = path.join(__dirname, "temp-key.json");
@@ -35,38 +38,54 @@ function buildPrompt(text, mapType) {
 }
 
 app.post("/generateMap", async (req, res) => {
+  const { text, mapType } = req.body;
+  console.log(
+    `[INFO] Richiesta ricevuta - text: "${text}", mapType: "${mapType}"`
+  );
+
+  if (!text || !mapType) {
+    console.warn("[WARN] Mancano text o mapType");
+    return res.status(400).json({ error: "text e mapType sono obbligatori" });
+  }
+
+  if (USE_MOCK) {
+    console.log("[MOCK] Restituisco risposta mock per test frontend");
+    return res.json({
+      nodes: [
+        { id: 1, label: "Nodo principale" },
+        { id: 2, label: "Nodo secondario" },
+        { id: 3, label: "Nodo terziario" },
+      ],
+      links: [
+        { source: 1, target: 2 },
+        { source: 2, target: 3 },
+      ],
+      mapType,
+    });
+  }
+
   try {
-    const { text, mapType } = req.body;
-
-    if (!text || !mapType) {
-      return res.status(400).json({ error: "text e mapType sono obbligatori" });
-    }
-
     const prompt = buildPrompt(text, mapType);
+    console.log("[INFO] Prompt costruito:", prompt);
 
     const request = {
       endpoint: `projects/conceptmap-pro/locations/europe-west4/publishers/google/models/gemini-1.5-flash`,
       instances: [{ content: prompt }],
-      parameters: {
-        temperature: 0.2,
-        maxOutputTokens: 800,
-      },
+      parameters: { temperature: 0.2, maxOutputTokens: 800 },
     };
 
     const [response] = await client.predict(request);
     const outputText = response.predictions[0]?.content || "";
 
-    // Log per debug
     console.log("=== Output grezzo dal modello ===");
     console.log(outputText);
     console.log("=== Fine output ===");
 
     let jsonResult;
-    console.log("[INFO] Output grezzo dal modello:", outputText);
     try {
       jsonResult = JSON.parse(outputText);
     } catch {
-      // Se non è JSON valido, restituisci comunque il raw output
+      console.warn("[WARN] Output non JSON, restituisco raw");
       return res.status(200).json({
         warning: "Il modello non ha restituito un JSON valido",
         rawOutput: outputText,
@@ -75,20 +94,16 @@ app.post("/generateMap", async (req, res) => {
 
     res.json(jsonResult);
   } catch (error) {
-    console.error("Errore interno server:", error);
+    console.error("[ERROR] Errore interno server:", error);
     res
       .status(500)
       .json({ error: "Errore nel server", details: error.message });
   } finally {
     // Rimuove il file temporaneo della chiave
-    if (fs.existsSync(tempPath)) {
-      fs.unlinkSync(tempPath);
-    }
+    if (fs.existsSync(tempPath)) fs.unlinkSync(tempPath);
   }
 });
 
 // Porta dinamica per Render
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server attivo su porta ${PORT}`);
-});
+app.listen(PORT, () => console.log(`[INFO] Server attivo su porta ${PORT}`));
