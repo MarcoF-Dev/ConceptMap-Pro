@@ -1,19 +1,23 @@
-// testGemini.js
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
 const { PredictionServiceClient } = require("@google-cloud/aiplatform");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Controlla se il percorso al JSON è impostato
-const keyPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+// Scrive la chiave in un file temporaneo
+const keyJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
+const tempPath = path.join(__dirname, "temp-key.json");
+fs.writeFileSync(tempPath, keyJson);
 
+// Configura il client Vertex AI
 const client = new PredictionServiceClient({
   projectId: "conceptmap-pro",
-  keyFilename: keyPath,
+  keyFilename: tempPath,
   apiEndpoint: "europe-west4-aiplatform.googleapis.com",
 });
 
@@ -39,7 +43,6 @@ app.post("/generateMap", async (req, res) => {
 
     const prompt = buildPrompt(text, mapType);
 
-    // Configurazione richiesta a Vertex
     const request = {
       endpoint: `projects/conceptmap-pro/locations/europe-west4/publishers/google/models/gemini-1.5-flash`,
       instances: [{ content: prompt }],
@@ -49,13 +52,10 @@ app.post("/generateMap", async (req, res) => {
       },
     };
 
-    // Chiamata al modello
     const [response] = await client.predict(request);
 
-    // Estrazione output
     let outputText = response.predictions[0].content || "";
 
-    // Pulizia e parsing del JSON
     let jsonResult;
     try {
       jsonResult = JSON.parse(outputText);
