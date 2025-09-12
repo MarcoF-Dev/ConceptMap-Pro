@@ -930,7 +930,14 @@ modelCards.forEach((card) => {
 //Create magic map
 
 const createMagicBtn = document.getElementById("magicCardBtn");
-createMagicBtn.addEventListener("click", checkCard);
+createMagicBtn.addEventListener("click", () => {
+  checkCard();
+  cleanMagicMap();
+  modelCards.forEach((card) => {
+    card.classList.remove("active");
+  });
+  textarea.value = "";
+});
 
 function checkCard() {
   function createToast(text, color) {
@@ -968,11 +975,10 @@ function checkCard() {
   }
 
   sendToGemini(textValue, modelValue);
+  showSection("magicMap");
 }
 
 async function sendToGemini(text, modelId) {
-  logEvent("info", "Invio richiesta a Gemini...", { text, modelId });
-
   try {
     const response = await fetch(
       "https://conceptmap-pro.onrender.com/generateMap",
@@ -987,17 +993,13 @@ async function sendToGemini(text, modelId) {
     );
 
     if (!response.ok) {
-      logEvent("error", `Errore server: ${response.status}`);
       throw new Error(`Errore server: ${response.status}`);
     }
 
     const data = await response.json();
-    logEvent("success", "Risposta ricevuta dal server", data);
 
-    // Qui puoi chiamare la funzione che disegna la mappa
-    // drawMap(data);
+    createMagicMap(prompt, modelId);
   } catch (err) {
-    logEvent("error", "Errore nella generazione della mappa", err);
     Toastify({
       text: "Errore nella generazione della mappa",
       duration: 2500,
@@ -1010,28 +1012,167 @@ async function sendToGemini(text, modelId) {
     }).showToast();
   }
 }
+const homeFromMagic = document.getElementById("homeFromMagic");
+homeFromMagic.addEventListener("click", () => {
+  showSection("magicMapPage");
+});
+const magicMap = document.getElementById("magicMapContainer");
+function cleanMagicMap() {
+  magicRadialShape = [];
+  nodeIndex = 0;
+  magicMap.innerHTML = `<svg
+        id="magicConnections"
+        style="
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+        "
+      ></svg>
+      <button id="homeFromMagic">
+        Back <i class="ri-arrow-go-back-line"></i>
+      </button>`;
+}
+const prompt = [
+  "JavaScript", // parola chiave principale
+  "Manipolazione del DOM",
+  "Funzioni e parametri",
+  "Oggetti e classi",
+  "Eventi e listener",
+  "Array e metodi comuni",
+  "Asincronia e Promises",
+  "Interazione con API esterne",
+  "quadrato",
+  "quadrato",
+  "quadrato",
+  "quadrato",
+  "quadrato",
+];
+function createMagicMap(prompt, modelType) {
+  if (modelType.trim() === "radiale") {
+    createMagicRadialShape("circle", prompt[0], prompt.length);
+    for (let i = 1; i < prompt.length; i++) {
+      const element = prompt[i].split(" ");
 
-function logEvent(type, message, data = null) {
-  const timestamp = new Date().toISOString();
-  const formatted = `[${timestamp}] [${type.toUpperCase()}] ${message}`;
+      if (element.length > 2) {
+        createMagicRadialShape("rectangle", prompt[i], prompt.length);
+      } else {
+        createMagicRadialShape("box", prompt[i], prompt.length);
+      }
+    }
+    requestAnimationFrame(() => {
+      createRadialLink(magicRadialShape);
+    });
+  } else if (modelType.trim() === "lineare") {
+    for (let i = 0; i < prompt.length; i++) {
+      const element = prompt[i].split(" ");
 
-  // Scrive nella console
-  if (data) console.log(formatted, data);
-  else console.log(formatted);
+      if (element.length > 2) {
+        createMagicLinearShape("rectangle", prompt[i]);
+      } else {
+        createMagicLinearShape("box", prompt[i]);
+      }
+    }
+  }
+}
+let initialX = 100;
+let initialY = 200;
+function createMagicLinearShape(classe, text) {
+  const div = document.createElement("div");
+  div.classList.add(classe, "magicDiv");
+  div.textContent = text;
+  div.style.left = initialX + "px";
+  div.style.top = initialY + "px";
+  magicMap.appendChild(div);
+  initialX += 200;
+}
 
-  // Scrive nel logger visivo
-  const loggerDiv = document.getElementById("logger");
-  const newLine = document.createElement("div");
-  newLine.textContent = data
-    ? `${formatted} ${JSON.stringify(data)}`
-    : formatted;
+let magicRadialShape = [];
+let radius = 300;
+let nodeIndex = 0;
+function createMagicRadialShape(classe, text, maxLenght) {
+  if (maxLenght > 12) {
+    radius = 350;
+  }
+  console.log(radius);
+  const div = document.createElement("div");
+  div.classList.add(classe, "magicDiv");
+  div.textContent = text;
+  magicMap.appendChild(div);
 
-  // Colore per tipo di log
-  if (type === "error") newLine.style.color = "red";
-  else if (type === "warn") newLine.style.color = "orange";
-  else if (type === "success") newLine.style.color = "green";
-  else newLine.style.color = "black";
+  const rect = magicMap.getBoundingClientRect();
+  const containerWidth = rect.width;
+  const containerHeight = rect.height;
 
-  loggerDiv.appendChild(newLine);
-  loggerDiv.scrollTop = loggerDiv.scrollHeight; // scorre in basso automaticamente
+  const childWidth = div.offsetWidth;
+  const childHeight = div.offsetHeight;
+
+  const centerX = containerWidth / 2;
+  const centerY = containerHeight / 2;
+
+  if (magicMap.children.length === 3) {
+    // primo nodo al centro
+    div.style.left = `${centerX - childWidth / 2}px`;
+    div.style.top = `${centerY - childHeight / 2}px`;
+  } else {
+    // nodi successivi in cerchio
+    const totalNodesAround = maxLenght - 1; // numero massimo nodi per cerchio
+    const angle = (2 * Math.PI * nodeIndex) / totalNodesAround;
+
+    const x = centerX + radius * Math.cos(angle) - childWidth / 2;
+    const y = centerY + radius * Math.sin(angle) - childHeight / 2;
+
+    div.style.left = `${x}px`;
+    div.style.top = `${y}px`;
+
+    nodeIndex++; // incremento solo per i nodi attorno
+  }
+  magicRadialShape.push(div);
+}
+function createRadialLink(nodesArray) {
+  const svg = document.getElementById("magicConnections");
+
+  // Pulisce le linee precedenti
+  svg.innerHTML = "";
+
+  const centralDiv = nodesArray[0];
+  const centralRect = centralDiv.getBoundingClientRect();
+  const centralX = centralRect.left + centralRect.width / 2;
+  const centralY = centralRect.top + centralRect.height / 2;
+  const centralRadiusX = centralRect.width / 2;
+  const centralRadiusY = centralRect.height / 2;
+
+  for (let i = 1; i < nodesArray.length; i++) {
+    const node = nodesArray[i];
+    const nodeRect = node.getBoundingClientRect();
+    const nodeX = nodeRect.left + nodeRect.width / 2;
+    const nodeY = nodeRect.top + nodeRect.height / 2;
+    const nodeRadiusX = nodeRect.width / 2;
+    const nodeRadiusY = nodeRect.height / 2;
+
+    // Vettore dal centro al nodo
+    const dx = nodeX - centralX;
+    const dy = nodeY - centralY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    // Punto sul bordo del cerchio centrale
+    const startX = centralX + (dx / distance) * centralRadiusX;
+    const startY = centralY + (dy / distance) * centralRadiusY;
+
+    // Punto sul bordo del nodo
+    const endX = nodeX - (dx / distance) * nodeRadiusX;
+    const endY = nodeY - (dy / distance) * nodeRadiusY;
+
+    // Crea la linea SVG
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", startX);
+    line.setAttribute("y1", startY);
+    line.setAttribute("x2", endX);
+    line.setAttribute("y2", endY);
+    line.setAttribute("stroke", "black");
+    line.setAttribute("stroke-width", "2");
+    svg.appendChild(line);
+  }
 }

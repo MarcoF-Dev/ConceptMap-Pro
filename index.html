@@ -283,59 +283,31 @@
             </div>
 
             <!-- Modello Gerarchica -->
-            <div class="modelCard" data-model="gerarchica" id="gerarchica">
-              <svg viewBox="0 0 200 200" class="modelSvg">
-                <!-- Linee -->
-                <line
-                  x1="100"
-                  y1="50"
-                  x2="60"
-                  y2="120"
-                  stroke="#555"
-                  stroke-width="2"
-                />
-                <line
-                  x1="100"
-                  y1="50"
-                  x2="140"
-                  y2="120"
-                  stroke="#555"
-                  stroke-width="2"
-                />
-                <!-- Nodi -->
-                <rect
-                  x="80"
-                  y="30"
-                  width="40"
-                  height="30"
-                  fill="#ffc107"
-                  rx="4"
-                />
-                <rect
-                  x="40"
-                  y="120"
-                  width="40"
-                  height="30"
-                  fill="#ffc107"
-                  rx="4"
-                />
-                <rect
-                  x="120"
-                  y="120"
-                  width="40"
-                  height="30"
-                  fill="#ffc107"
-                  rx="4"
-                />
-              </svg>
-              <p>Gerarchica</p>
-            </div>
           </div>
         </div>
         <button id="magicCardBtn"><i class="ri-magic-line"></i> Crea</button>
       </div>
       <button id="magicBtnHome"><i class="ri-home-2-line"></i> Home</button>
       <div id="logger"></div>
+    </section>
+    <section id="magicMap" class="pageSection">
+      <div id="magicMapContainer">
+        <svg
+          id="magicConnections"
+          style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+          "
+        ></svg>
+      </div>
+
+      <button id="homeFromMagic">
+        Back <i class="ri-arrow-go-back-line"></i>
+      </button>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>

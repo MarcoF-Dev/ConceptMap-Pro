@@ -30,8 +30,7 @@ function buildPrompt(text, mapType) {
       return `Crea una mappa concettuale radiale. Nodo centrale principale e nodi secondari collegati. Restituisci JSON con nodes e links. Basati su questo testo ${text}`;
     case "lineare":
       return `Crea una mappa concettuale lineare, collegando i concetti in sequenza. Restituisci JSON con nodes e links. Basati su questo testo ${text}`;
-    case "gerarchica":
-      return `Crea una mappa concettuale gerarchica. Organizza i concetti per livelli: principale, secondario, terziario. Restituisci JSON con nodes, links e level. Basati su questo testo ${text}`;
+
     default:
       return "";
   }
@@ -55,6 +54,9 @@ app.post("/generateMap", async (req, res) => {
         { id: 1, label: "Nodo principale" },
         { id: 2, label: "Nodo secondario" },
         { id: 3, label: "Nodo terziario" },
+        { id: 4, label: "Nodo " },
+        { id: 5, label: "attolo" },
+        { id: 6, label: "Guerraaaaa" },
       ],
       links: [
         { source: 1, target: 2 },
