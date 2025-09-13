@@ -18,20 +18,22 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 function buildPrompt(text, mapType) {
   switch (mapType) {
     case "radiale":
-      return `Crea un array contenente gli elementi principali del testo. 
-Il primo elemento deve essere l'elemento cardine, seguito da tutti gli altri elementi collegati a esso. 
-Restituisci un JSON basato su questo testo: ${text}`;
+      return `Crea un array semplice contenente solo gli elementi principali del testo. 
+Il primo elemento deve essere l'elemento centrale, seguito dagli altri elementi collegati. 
+Rispondi **solo** con un array JavaScript valido, senza oggetti o chiavi, senza spiegazioni aggiuntive:
+Testo: ${text}`;
     case "lineare":
-      return `Crea un array contenente gli elementi principali del testo, collegati in sequenza. 
-Restituisci un JSON basato su questo testo: ${text}`;
+      return `Crea un array semplice contenente solo gli elementi principali del testo, collegati in sequenza. 
+Rispondi **solo** con un array JavaScript valido, senza oggetti o chiavi, senza spiegazioni aggiuntive:
+Testo: ${text}`;
     default:
       return text;
   }
 }
 
-// Funzione per ripulire output da ```json ... ```
+// Funzione per ripulire output da ```json ... ``` o ``` ... ```
 function cleanOutput(text) {
-  return text.replace(/```json|```/g, "").trim();
+  return text.replace(/```(json)?/g, "").trim();
 }
 
 // Endpoint per generare la mappa
@@ -49,27 +51,19 @@ app.post("/generateMap", async (req, res) => {
     const result = await model.generateContent(prompt);
     let outputText = result.response.text();
 
-    // Pulisce l'output da ```json ... ```
+    // Pulisce l'output da ```json ... ``` o ```
     outputText = cleanOutput(outputText);
 
-    let jsonResult;
-    try {
-      jsonResult = JSON.parse(outputText);
-    } catch {
-      // Se ancora non è JSON valido, restituisce un array con rawOutput
-      jsonResult = {
-        warning: "Output non JSON, uso raw",
-        rawOutput: outputText,
-      };
-    }
-    const key = Object.keys(jsonResult)[0];
     let arrayResult;
-    if (Array.isArray(jsonResult[key])) {
-      arrayResult = [key, ...jsonResult[key]];
-    } else {
-      // se jsonResult[key] è una stringa la trasformi in array di una sola voce
-      arrayResult = [key, jsonResult[key]];
+    try {
+      // Forza il parsing come array
+      arrayResult = JSON.parse(outputText);
+      if (!Array.isArray(arrayResult)) throw new Error("Non è un array");
+    } catch {
+      // Se fallisce il parsing, restituisce un array con rawOutput
+      arrayResult = [outputText];
     }
+
     res.json(arrayResult);
   } catch (err) {
     console.error("Gemini API error:", err);
