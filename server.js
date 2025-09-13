@@ -48,17 +48,22 @@ app.post("/generateMap", async (req, res) => {
     const result = await model.generateContent(prompt);
     let outputText = result.response.text();
 
-    // Rimuove eventuali prefissi tipo "javascript\n" o ```json
+    // Rimuove prefisso tipo "javascript\n" o ```json ... ```
     outputText = outputText.replace(/^javascript\n|```json|```/g, "").trim();
 
-    // Prova a parsare l'array JSON
+    // Rimuove eventuali virgolette esterne che racchiudono tutto l'array
+    if (outputText.startsWith('"') && outputText.endsWith('"')) {
+      outputText = outputText.slice(1, -1).replace(/\\"/g, '"');
+    }
+
     let arrayResult;
     try {
       arrayResult = JSON.parse(outputText);
     } catch {
-      // fallback: se non è JSON valido, metti tutto in un array singolo
+      // fallback: metti tutto in un array singolo se il parsing fallisce
       arrayResult = [outputText];
     }
+
     res.json(arrayResult);
   } catch (err) {
     console.error("Gemini API error:", err);
