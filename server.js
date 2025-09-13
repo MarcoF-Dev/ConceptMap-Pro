@@ -18,13 +18,16 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 function buildPrompt(text, mapType) {
   switch (mapType) {
     case "radiale":
-      return `Crea un array semplice contenente solo gli elementi principali del testo. 
-Il primo elemento deve essere l'elemento centrale, seguito dagli altri elementi collegati. 
-Rispondi **solo** con un array JavaScript valido, senza oggetti o chiavi, senza spiegazioni aggiuntive:
+      return `Crea un **array JSON puro** contenente solo gli elementi principali del testo. 
+Il primo elemento deve essere l'elemento centrale, seguito dagli altri elementi collegati ad esso. 
+Rispondi **solo** con l'array, senza oggetti, chiavi o spiegazioni. 
+Non inserire prefissi tipo "javascript\\n" o json. 
 Testo: ${text}`;
+
     case "lineare":
-      return `Crea un array semplice contenente solo gli elementi principali del testo, collegati in sequenza. 
-Rispondi **solo** con un array JavaScript valido, senza oggetti o chiavi, senza spiegazioni aggiuntive:
+      return `Crea un **array JSON puro** contenente solo gli elementi principali del testo, collegati in sequenza. 
+Rispondi **solo** con l'array, senza oggetti, chiavi o spiegazioni. 
+Non inserire prefissi tipo "javascript\\n" o json. 
 Testo: ${text}`;
     default:
       return text;
