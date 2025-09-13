@@ -408,8 +408,8 @@ span[class$="-icon"]:hover,
 
 /* Box, Rectangle, Circle */
 .box {
-  height: 100px;
-  width: 100px;
+  min-height: 100px;
+  min-width: 100px;
   border: 2px solid red;
 
   position: absolute;
@@ -418,8 +418,8 @@ span[class$="-icon"]:hover,
 }
 
 .rectangle {
-  width: 150px;
-  height: 100px;
+  min-width: 150px;
+  min-height: 100px;
   border: 2px solid blue;
 
   position: absolute;
@@ -428,8 +428,8 @@ span[class$="-icon"]:hover,
 }
 
 .circle {
-  width: 100px;
-  height: 100px;
+  min-width: 100px;
+  min-height: 100px;
   border: 2px solid green;
 
   position: absolute;
