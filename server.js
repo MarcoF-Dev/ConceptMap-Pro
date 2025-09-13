@@ -62,8 +62,9 @@ app.post("/generateMap", async (req, res) => {
         rawOutput: outputText,
       };
     }
-
-    res.json(jsonResult);
+    const key = Object.keys(jsonResult)[0];
+    const arrayResult = [key, ...jsonResult[key]];
+    res.json(arrayResult);
   } catch (err) {
     console.error("Gemini API error:", err);
     res.status(500).json({
