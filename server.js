@@ -63,7 +63,13 @@ app.post("/generateMap", async (req, res) => {
       };
     }
     const key = Object.keys(jsonResult)[0];
-    const arrayResult = [key, ...jsonResult[key]];
+    let arrayResult;
+    if (Array.isArray(jsonResult[key])) {
+      arrayResult = [key, ...jsonResult[key]];
+    } else {
+      // se jsonResult[key] è una stringa la trasformi in array di una sola voce
+      arrayResult = [key, jsonResult[key]];
+    }
     res.json(arrayResult);
   } catch (err) {
     console.error("Gemini API error:", err);
