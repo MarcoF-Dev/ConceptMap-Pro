@@ -1,72 +1,54 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const fs = require("fs");
-const path = require("path");
-const { PredictionServiceClient } = require("@google-cloud/aiplatform");
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+dotenv.config();
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Scrive la chiave in un file temporaneo
-const keyJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
-const tempPath = path.join(__dirname, "temp-key.json");
-fs.writeFileSync(tempPath, keyJson);
-
-// Configura il client Vertex AI
-const client = new PredictionServiceClient({
-  projectId: "conceptmap-pro",
-  keyFilename: tempPath,
-  apiEndpoint: "europe-west4-aiplatform.googleapis.com",
-});
+// Inizializza Gemini con API Key
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 // Funzione per costruire il prompt dinamico
 function buildPrompt(text, mapType) {
   switch (mapType) {
     case "radiale":
-      return `Crea un array contenente gli elementi principali del testo. Il primo elemento deve essere l'elemento cardine, seguito da tutti gli altri elementi collegati a esso. Restituisci un JSON basato su questo testo: ${text}`;
+      return `Crea un array contenente gli elementi principali del testo. 
+Il primo elemento deve essere l'elemento cardine, seguito da tutti gli altri elementi collegati a esso. 
+Restituisci un JSON basato su questo testo: ${text}`;
     case "lineare":
-      return `Crea un array contenente gli elementi principali del testo, collegati in sequenza. Restituisci un JSON basato su questo testo: ${text}`;
+      return `Crea un array contenente gli elementi principali del testo, collegati in sequenza. 
+Restituisci un JSON basato su questo testo: ${text}`;
     default:
-      return "";
+      return text;
   }
 }
 
 // Endpoint per generare la mappa
 app.post("/generateMap", async (req, res) => {
   const { text, mapType } = req.body;
-  console.log(
-    `[INFO] Richiesta ricevuta - text: "${text}", mapType: "${mapType}"`
-  );
 
   if (!text || !mapType) {
-    console.warn("[WARN] Mancano text o mapType");
     return res.status(400).json({ error: "text e mapType sono obbligatori" });
   }
 
   try {
     const prompt = buildPrompt(text, mapType);
-    console.log("[INFO] Prompt costruito:", prompt);
 
-    const request = {
-      endpoint: `projects/conceptmap-pro/locations/europe-west4/publishers/google/models/gemini-1.5-flash`,
-      instances: [{ content: prompt }],
-      parameters: { temperature: 0.2, maxOutputTokens: 800 },
-    };
-
-    const [response] = await client.predict(request);
-    const outputText = response.predictions[0]?.content || "";
-
-    console.log("=== Output grezzo dal modello ===");
-    console.log(outputText);
-    console.log("=== Fine output ===");
+    // Chiamata a Gemini
+    const result = await model.generateContent(prompt);
+    const outputText = result.response.text();
 
     let jsonResult;
     try {
       jsonResult = JSON.parse(outputText);
     } catch {
-      console.warn("[WARN] Output non JSON, restituisco raw");
+      // Se il modello non restituisce JSON valido, invia raw
       return res.status(200).json({
         warning: "Il modello non ha restituito un JSON valido",
         rawOutput: outputText,
@@ -74,17 +56,16 @@ app.post("/generateMap", async (req, res) => {
     }
 
     res.json(jsonResult);
-  } catch (error) {
-    console.error("[ERROR] Errore interno server:", error);
+  } catch (err) {
+    console.error("Gemini API error:", err);
     res
       .status(500)
-      .json({ error: "Errore nel server", details: error.message });
-  } finally {
-    // Rimuove il file temporaneo della chiave
-    if (fs.existsSync(tempPath)) fs.unlinkSync(tempPath);
+      .json({
+        error: "Errore durante la generazione della mappa",
+        details: err.message,
+      });
   }
 });
 
-// Porta dinamica per Render
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`[INFO] Server attivo su porta ${PORT}`));
