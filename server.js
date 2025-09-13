@@ -32,9 +32,6 @@ Testo: ${text}`;
 }
 
 // Funzione per ripulire output da ```json ... ``` o ``` ... ```
-function cleanOutput(text) {
-  return text.replace(/```(json)?/g, "").trim();
-}
 
 // Endpoint per generare la mappa
 app.post("/generateMap", async (req, res) => {
@@ -51,19 +48,17 @@ app.post("/generateMap", async (req, res) => {
     const result = await model.generateContent(prompt);
     let outputText = result.response.text();
 
-    // Pulisce l'output da ```json ... ``` o ```
-    outputText = cleanOutput(outputText);
+    // Rimuove eventuali prefissi tipo "javascript\n" o ```json
+    outputText = outputText.replace(/^javascript\n|```json|```/g, "").trim();
 
+    // Prova a parsare l'array JSON
     let arrayResult;
     try {
-      // Forza il parsing come array
       arrayResult = JSON.parse(outputText);
-      if (!Array.isArray(arrayResult)) throw new Error("Non è un array");
     } catch {
-      // Se fallisce il parsing, restituisce un array con rawOutput
+      // fallback: se non è JSON valido, metti tutto in un array singolo
       arrayResult = [outputText];
     }
-
     res.json(arrayResult);
   } catch (err) {
     console.error("Gemini API error:", err);
