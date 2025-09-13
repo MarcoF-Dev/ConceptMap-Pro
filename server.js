@@ -9,9 +9,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Attiva/disattiva il mock per testare senza consumare token
-const USE_MOCK = true;
-
 // Scrive la chiave in un file temporaneo
 const keyJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
 const tempPath = path.join(__dirname, "temp-key.json");
@@ -24,18 +21,19 @@ const client = new PredictionServiceClient({
   apiEndpoint: "europe-west4-aiplatform.googleapis.com",
 });
 
+// Funzione per costruire il prompt dinamico
 function buildPrompt(text, mapType) {
   switch (mapType) {
     case "radiale":
-      return `Crea una mappa concettuale radiale. Nodo centrale principale e nodi secondari collegati. Restituisci JSON con nodes e links. Basati su questo testo ${text}`;
+      return `Crea un array contenente gli elementi principali del testo. Il primo elemento deve essere l'elemento cardine, seguito da tutti gli altri elementi collegati a esso. Restituisci un JSON basato su questo testo: ${text}`;
     case "lineare":
-      return `Crea una mappa concettuale lineare, collegando i concetti in sequenza. Restituisci JSON con nodes e links. Basati su questo testo ${text}`;
-
+      return `Crea un array contenente gli elementi principali del testo, collegati in sequenza. Restituisci un JSON basato su questo testo: ${text}`;
     default:
       return "";
   }
 }
 
+// Endpoint per generare la mappa
 app.post("/generateMap", async (req, res) => {
   const { text, mapType } = req.body;
   console.log(
@@ -45,25 +43,6 @@ app.post("/generateMap", async (req, res) => {
   if (!text || !mapType) {
     console.warn("[WARN] Mancano text o mapType");
     return res.status(400).json({ error: "text e mapType sono obbligatori" });
-  }
-
-  if (USE_MOCK) {
-    console.log("[MOCK] Restituisco risposta mock per test frontend");
-    return res.json({
-      nodes: [
-        { id: 1, label: "Nodo principale" },
-        { id: 2, label: "Nodo secondario" },
-        { id: 3, label: "Nodo terziario" },
-        { id: 4, label: "Nodo " },
-        { id: 5, label: "attolo" },
-        { id: 6, label: "Guerraaaaa" },
-      ],
-      links: [
-        { source: 1, target: 2 },
-        { source: 2, target: 3 },
-      ],
-      mapType,
-    });
   }
 
   try {

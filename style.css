@@ -971,7 +971,8 @@ span[class$="-icon"]:hover,
 #magicMapContainer {
   height: 100%;
 }
-#homeFromMagic {
+#homeFromMagic,
+#uploadMagicMap {
   min-width: 84px;
   padding: 0.625rem 1.25rem;
   height: 40px;
@@ -986,11 +987,17 @@ span[class$="-icon"]:hover,
   transition: background-color 0.2s;
   font-family: "Poppins", sans-serif;
   position: absolute;
-  top: 1rem;
   right: 2rem;
 }
-#homeFromMagic:hover {
+#homeFromMagic:hover,
+#uploadMagicMap:hover {
   background-color: #1d4ed8;
+}
+#homeFromMagic {
+  top: 1rem;
+}
+#uploadMagicMap {
+  bottom: 1rem;
 }
 .magicDiv {
   display: flex;
