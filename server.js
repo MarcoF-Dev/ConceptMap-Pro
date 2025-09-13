@@ -29,6 +29,11 @@ Restituisci un JSON basato su questo testo: ${text}`;
   }
 }
 
+// Funzione per ripulire output da ```json ... ```
+function cleanOutput(text) {
+  return text.replace(/```json|```/g, "").trim();
+}
+
 // Endpoint per generare la mappa
 app.post("/generateMap", async (req, res) => {
   const { text, mapType } = req.body;
@@ -42,28 +47,29 @@ app.post("/generateMap", async (req, res) => {
 
     // Chiamata a Gemini
     const result = await model.generateContent(prompt);
-    const outputText = result.response.text();
+    let outputText = result.response.text();
+
+    // Pulisce l'output da ```json ... ```
+    outputText = cleanOutput(outputText);
 
     let jsonResult;
     try {
       jsonResult = JSON.parse(outputText);
     } catch {
-      // Se il modello non restituisce JSON valido, invia raw
-      return res.status(200).json({
-        warning: "Il modello non ha restituito un JSON valido",
+      // Se ancora non è JSON valido, restituisce un array con rawOutput
+      jsonResult = {
+        warning: "Output non JSON, uso raw",
         rawOutput: outputText,
-      });
+      };
     }
 
     res.json(jsonResult);
   } catch (err) {
     console.error("Gemini API error:", err);
-    res
-      .status(500)
-      .json({
-        error: "Errore durante la generazione della mappa",
-        details: err.message,
-      });
+    res.status(500).json({
+      error: "Errore durante la generazione della mappa",
+      details: err.message,
+    });
   }
 });
 
