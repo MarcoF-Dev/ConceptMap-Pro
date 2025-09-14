@@ -1012,7 +1012,7 @@ function checkCard() {
  ********************************************************************/
 async function sendToGemini(text, mapType) {
   createMagicBtn.disabled = true;
-  myButton.style.opacity = "0.5"; // rende il bottone più chiaro
+  createMagicBtn.style.opacity = "0.5"; // rende il bottone più chiaro
 
   console.log("[INFO] Invio richiesta a Gemini");
   console.log("[INFO] Testo inviato:", text);
@@ -1059,7 +1059,7 @@ async function sendToGemini(text, mapType) {
     loadingText.textContent = "";
     msgIndex = 0;
     createMagicBtn.disabled = false;
-    myButton.style.opacity = "1";
+    createMagicBtn.style.opacity = "1";
 
     // Mostra la sezione della mappa
     cleanMagicMap();
