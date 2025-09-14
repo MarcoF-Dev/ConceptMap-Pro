@@ -1,5 +1,26 @@
 <html>
   <head>
+    <title>Concept Map Pro - Intelligent Concept Map Generator</title>
+    <meta
+      name="description"
+      content="Concept Map Pro allows you to visually organize ideas, concepts, and relationships easily and intuitively. Generate smart concept maps automatically from your text."
+    />
+
+    <!-- Meta keywords -->
+    <meta
+      name="keywords"
+      content="concept map, mind map, automatic map, visual organizer, idea mapping, learning, education, productivity, Marco Favara"
+    />
+
+    <!-- Autore -->
+    <meta name="author" content="Marco Favara" />
+
+    <!-- Lingua della pagina -->
+    <meta name="language" content="en" />
+    <meta http-equiv="Content-Language" content="en" />
+    <link href="assets/Logo.png" rel="icon" sizes="64x64" type="image/x-icon" />
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
     <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
     <link
       rel="stylesheet"
@@ -9,10 +30,6 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
     />
-    <title>ConceptMap Pro</title>
-    <link href="assets/Logo.png" rel="icon" type="image/x-icon" />
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <section id="mainPage" class="active pageSection">
@@ -25,12 +42,19 @@
               <h2>ConceptMap Pro</h2>
             </div>
             <div class="nav-actions">
-              <nav class="nav-links">
-                <a href="#"><i class="ri-home-2-line"></i> Home</a>
-                <a href="#"><i class="ri-information-line"></i> About</a>
-              </nav>
-              <button class="starterBtn">
-                <i class="ri-mail-line"></i> Contact
+              <a href="https://www.instagram.com/_marco.favara_" target="_blank"
+                ><i class="ri-instagram-line"></i
+              ></a>
+              <a href="https://github.com/MarcoF-Dev" target="_blank"
+                ><i class="ri-github-fill"></i
+              ></a>
+              <button class="starterBtn" id="contactBtn">
+                <a
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=marcofavara.devgmail.com&su=Richiesta%20info&body=Messaggio%20per%20Favara%20Marco."
+                  target="_blank"
+                >
+                  <i class="ri-mail-line"></i> Contact</a
+                >
               </button>
             </div>
           </header>
@@ -62,10 +86,10 @@
     </section>
     <section id="manualMapPage" class="pageSection">
       <header>
-        <h1>Crea la tua mappa concettuale</h1>
+        <h1>Create Your Concept Map</h1>
         <p class="subtitle">
-          Organizza visivamente idee, concetti e relazioni in modo semplice e
-          intuitivo.
+          Visually organize ideas, concepts, and relationships in a simple and
+          intuitive way.
         </p>
       </header>
       <div id="drawSection">
@@ -134,7 +158,7 @@
       <button id="returnHome"><i class="ri-home-2-line"></i> Home</button>
 
       <div id="fastMapCard" class="fast-map-card">
-        <h2>Crea forme velocemente</h2>
+        <h2>Create shapes quickly</h2>
         <label>
           Quadrati:
           <input
@@ -166,129 +190,32 @@
           />
         </label>
         <div class="fast-map-buttons">
-          <button id="confirmFastMap">Conferma</button>
-          <button id="closeFastMap">Chiudi</button>
+          <button id="confirmFastMap">
+            <i class="ri-check-line"></i> Confirm
+          </button>
+          <button id="closeFastMap"><i class="ri-close-line"></i> Close</button>
         </div>
       </div>
     </section>
     <section id="magicMapPage" class="pageSection">
       <div id="headerMagic">
-        <h1>
-          <h1>Crea la tua mappa intelligente</h1>
-          <p class="subtitle">
-            Genera automaticamente una mappa concettuale a partire dal tuo
-            testo!
-          </p>
-        </h1>
+        <h1>Create your smart concept map</h1>
+        <p class="subtitle">
+          Automatically generate a concept map from your text!
+        </p>
       </div>
       <div id="magicCard">
-        <h2>Inserisci testo da analizzare</h2>
+        <h2>Type the text to analyze</h2>
         <div id="textareaContainer"><textarea id="magicText"></textarea></div>
-        <div id="modelSection">
-          <h2>Seleziona il modello</h2>
-          <div id="modelContainer">
-            <!-- Modello Radiale -->
-            <div class="modelCard" data-model="radiale" id="radiale">
-              <svg viewBox="0 0 200 200" class="modelSvg">
-                <!-- Linee -->
-                <line
-                  x1="100"
-                  y1="100"
-                  x2="100"
-                  y2="30"
-                  stroke="#555"
-                  stroke-width="2"
-                />
-                <line
-                  x1="100"
-                  y1="100"
-                  x2="170"
-                  y2="100"
-                  stroke="#555"
-                  stroke-width="2"
-                />
-                <line
-                  x1="100"
-                  y1="100"
-                  x2="30"
-                  y2="100"
-                  stroke="#555"
-                  stroke-width="2"
-                />
-                <line
-                  x1="100"
-                  y1="100"
-                  x2="100"
-                  y2="170"
-                  stroke="#555"
-                  stroke-width="2"
-                />
-                <!-- Nodi -->
-                <circle cx="100" cy="100" r="20" fill="#007bff" />
-                <circle cx="100" cy="30" r="12" fill="#6c757d" />
-                <circle cx="170" cy="100" r="12" fill="#6c757d" />
-                <circle cx="30" cy="100" r="12" fill="#6c757d" />
-                <circle cx="100" cy="170" r="12" fill="#6c757d" />
-              </svg>
-              <p>Radiale</p>
-            </div>
-
-            <!-- Modello Lineare -->
-            <div class="modelCard" data-model="lineare" id="lineare ">
-              <svg viewBox="0 0 200 200" class="modelSvg">
-                <!-- Linee -->
-                <line
-                  x1="40"
-                  y1="100"
-                  x2="100"
-                  y2="100"
-                  stroke="#555"
-                  stroke-width="2"
-                />
-                <line
-                  x1="100"
-                  y1="100"
-                  x2="160"
-                  y2="100"
-                  stroke="#555"
-                  stroke-width="2"
-                />
-                <!-- Nodi -->
-                <rect
-                  x="20"
-                  y="85"
-                  width="40"
-                  height="30"
-                  fill="#28a745"
-                  rx="4"
-                />
-                <rect
-                  x="80"
-                  y="85"
-                  width="40"
-                  height="30"
-                  fill="#28a745"
-                  rx="4"
-                />
-                <rect
-                  x="140"
-                  y="85"
-                  width="40"
-                  height="30"
-                  fill="#28a745"
-                  rx="4"
-                />
-              </svg>
-              <p>Lineare</p>
-            </div>
-
-            <!-- Modello Gerarchica -->
-          </div>
+        <div id="magicFooterContainer">
+          <div id="logger"></div>
+          <button id="magicCardBtn">
+            <i class="ri-magic-line"></i> Create
+          </button>
         </div>
-        <button id="magicCardBtn"><i class="ri-magic-line"></i> Crea</button>
       </div>
+
       <button id="magicBtnHome"><i class="ri-home-2-line"></i> Home</button>
-      <div id="logger"></div>
     </section>
     <section id="magicMap" class="pageSection">
       <div id="magicMapContainer">

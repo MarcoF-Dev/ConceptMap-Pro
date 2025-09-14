@@ -67,45 +67,12 @@ section {
   align-items: center;
 }
 
-#mainPage .nav-links a {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #3f3f46;
-  margin-right: 16px;
-  text-decoration: none;
-  transition: color 0.2s;
-  position: relative;
-}
-
-#mainPage.nav-links a:last-child {
-  margin-right: 0;
-}
-#mainPage .nav-links a::after {
-  content: "";
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  display: block;
-  width: 0%;
-  height: 0.175px;
-  background: #2563eb;
-  transform: scaleX(0);
-  transition: transform 0.2s;
-}
-
-#mainPage .nav-links a:hover::after {
-  width: 100%;
-  transform: scaleX(1);
-}
-#mainPage .nav-links a:hover {
-  color: #2564eb;
-}
 #mainPage .starterBtn {
   min-width: 84px;
   padding: 0.625rem 1.25rem;
   height: 40px;
   background-color: #2563eb;
-  color: white;
+
   font-weight: 400;
   font-size: 1rem;
   border: none;
@@ -119,7 +86,35 @@ section {
 #mainPage .starterBtn:hover {
   background-color: #1d4ed8;
 }
+.starterBtn a {
+  text-decoration: none;
+  color: white;
+}
+.starterBtn a:active {
+  text-decoration: none;
+}
+.nav-actions > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: transparent;
+  color: #333;
+  font-size: 20px;
+  text-decoration: none;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+  font-family: "Poppins", sans-serif;
+}
+.nav-actions > a:hover {
+  background-color: rgba(37, 99, 235, 0.2);
+  color: #2563eb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
 /* Bottoni */
 /* Bottone "magico" Intelligent Map */
 .btn-magic,
@@ -214,7 +209,7 @@ section {
 /* Footer */
 #mainPage .footer {
   border-top: 1px solid #e4e4e7;
-  padding: 48px 16px;
+  padding: 36px 16px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -238,7 +233,6 @@ section {
 }
 #manualMapPage header h1,
 #magicMapPage h1 {
-  margin-top: 2rem;
   font-weight: 500;
   font-size: 2rem;
   text-align: center;
@@ -246,11 +240,11 @@ section {
 #manualMapPage header .subtitle,
 #magicMapPage .subtitle {
   display: block;
-  margin-top: 10px;
-  font-size: 1.15rem;
+
+  font-size: 1.35rem;
   color: #2563eb;
   font-weight: 500;
-  letter-spacing: 0.5px;
+
   background: linear-gradient(90deg, #60a5fa 0%, #9d4edd 100%);
   background-clip: text;
   -webkit-background-clip: text;
@@ -413,7 +407,7 @@ span[class$="-icon"]:hover,
   border: 2px solid red;
 
   position: absolute;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
   border-radius: 6px;
 }
 
@@ -423,7 +417,7 @@ span[class$="-icon"]:hover,
   border: 2px solid blue;
 
   position: absolute;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
   border-radius: 6px;
 }
 
@@ -434,7 +428,6 @@ span[class$="-icon"]:hover,
 
   position: absolute;
   border-radius: 50%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .shape.selectedShape,
 .text-div.selectedShape {
@@ -813,6 +806,10 @@ span[class$="-icon"]:hover,
 
 #magicMapPage {
   position: relative;
+  height: calc(100vh- 1rem);
+}
+#headerMagic {
+  margin-top: 1rem;
 }
 #magicMapPage .subtitle {
   margin-bottom: 1rem;
@@ -847,7 +844,7 @@ span[class$="-icon"]:hover,
 /* Textarea */
 #magicText {
   width: 100%;
-  min-height: 250px;
+  min-height: 500px;
   padding: 12px 16px;
   font-size: 1rem;
   font-family: "poppins", sans-serif;
@@ -888,61 +885,14 @@ span[class$="-icon"]:hover,
   box-shadow: 0 0 6px rgba(74, 144, 226, 0.3);
 }
 
-#modelContainer {
+#magicFooterContainer {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+}
+#logger {
+  font-weight: 500;
   margin-top: 20px;
-  margin-bottom: 1rem;
-}
-
-.modelCard {
-  width: 180px;
-  height: 200px;
-  background: #f8f9fa;
-  border: 2px solid #ddd;
-  border-radius: 12px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  transition: transform 0.2s, border 0.2s;
-  padding: 10px;
-}
-
-.modelCard:hover {
-  transform: translateY(-5px);
-  border-color: #007bff;
-}
-
-.modelCard p {
-  margin-top: 8px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #333;
-}
-
-.modelSvg {
-  width: 100%;
-  height: 150px;
-}
-.modelCard.active {
-  border-color: #007bff;
-  box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
-  animation: glowPulse 1.5s infinite alternate;
-}
-
-@keyframes glowPulse {
-  from {
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
-  }
-  to {
-    box-shadow: 0 0 20px rgba(0, 123, 255, 0.9);
-  }
-}
-
-#magicCardBtn {
-  align-self: flex-end;
+  color: #6a5acd;
 }
 #magicBtnHome {
   min-width: 84px;
@@ -959,7 +909,7 @@ span[class$="-icon"]:hover,
   transition: background-color 0.2s;
   font-family: "Poppins", sans-serif;
   position: absolute;
-  top: 0;
+  top: 1rem;
   right: 1rem;
 }
 #magicBtnHome:hover {
@@ -1000,6 +950,7 @@ span[class$="-icon"]:hover,
   bottom: 1rem;
 }
 .magicDiv {
+  padding: 0 10px;
   display: flex;
   justify-content: center;
   align-items: center;

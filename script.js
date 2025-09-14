@@ -1,4 +1,7 @@
-const manualBtn = document.getElementById("manualBtn");
+/********************************************************************
+ *                       CHANGE SECTION WITH BTN                *
+ ********************************************************************/
+manualBtn = document.getElementById("manualBtn");
 
 const homeBtn = document.getElementById("returnHome");
 
@@ -27,6 +30,9 @@ homeBtn.addEventListener("click", () => {
   showSection("mainPage");
 });
 
+/********************************************************************
+ *                      MANUAL DRAWING SECTION AND ICONS             *
+ ********************************************************************/
 const drawingSection = document.getElementById("drawSection");
 function cleanDrawingSection() {
   drawingSection.innerHTML = `<svg
@@ -48,11 +54,43 @@ const sidebarIcon = document.querySelectorAll(".sidebarIcon");
 const uploadIcon = document.getElementById("uploadIcon");
 // Screen in png di drawingSection
 uploadIcon.addEventListener("click", () => {
+  const textareas = drawingSection.querySelectorAll("textarea");
+  const tempDivs = [];
+
+  textareas.forEach((ta) => {
+    const tempDiv = document.createElement("div");
+    tempDiv.textContent = ta.value;
+
+    // copia gli stili principali
+    const style = getComputedStyle(ta);
+    tempDiv.style.width = style.width;
+    tempDiv.style.height = style.height;
+    tempDiv.style.font = style.font;
+    tempDiv.style.padding = style.padding;
+    tempDiv.style.margin = style.margin;
+    tempDiv.style.whiteSpace = "pre-wrap";
+    tempDiv.style.wordBreak = "break-word";
+    tempDiv.style.background = "transparent";
+
+    tempDiv.style.display = "flex";
+    tempDiv.style.alignItems = "center"; // verticale
+    tempDiv.style.justifyContent = "center"; // orizzontale
+    tempDiv.style.textAlign = style.textAlign;
+
+    ta.style.display = "none";
+    ta.parentElement.appendChild(tempDiv);
+    tempDivs.push({ tempDiv, textarea: ta });
+  });
   html2canvas(drawingSection).then((canvas) => {
     const link = document.createElement("a");
     link.download = "screenshot.png";
     link.href = canvas.toDataURL("image/png");
     link.click();
+  });
+
+  tempDivs.forEach(({ tempDiv, textarea }) => {
+    tempDiv.remove();
+    textarea.style.display = "block";
   });
 });
 let activeIconId = "squareIcon"; // Inizialmente attiva l'icona add
@@ -79,7 +117,7 @@ sidebarIcon.forEach((icon) => {
 
     if (activeIconId === "linkIcon") {
       Toastify({
-        text: "Seleziona 2 forme per collegarle",
+        text: "Selects 2 shapes to connect them",
         duration: 2500,
         gravity: "top", // top o bottom
         position: "left", // left, center, right
@@ -91,7 +129,7 @@ sidebarIcon.forEach((icon) => {
     } else if (activeIconId === "dragIcon") {
       drawingSection.style.cursor = "grab";
       Toastify({
-        text: "Premi su una forma per trascinarla",
+        text: "click on a shape to grab it",
         duration: 2500,
         gravity: "top", // top o bottom
         position: "left", // left, center, right
@@ -151,7 +189,9 @@ function updateExistingShapesMode() {
     }
   });
 }
-
+/********************************************************************
+ *                       CREATING SHAPES FOR MANUAL SECTION                *
+ ********************************************************************/
 // Funzione per creare forme direttamente
 function createShape(shapeType, x, y) {
   const div = document.createElement("div");
@@ -408,13 +448,14 @@ function addTextToShape(div) {
   textElement.focus();
 }
 
-// Funzione per rendere un elemento trascinabile
+/********************************************************************
+ *                      DRAGGABLE SHAPES           *
+ ********************************************************************/
 
 let draggingShape = null;
 let offsetX = 0;
 let offsetY = 0;
 
-// Inizio drag
 function makeDraggable(shape) {
   shape.addEventListener("mousedown", (e) => {
     if (activeIconId !== "dragIcon") {
@@ -524,7 +565,9 @@ document.addEventListener("mousedown", (event) => {
   }
 });
 
-// Funzione per mostrare i controlli delle frecce
+/********************************************************************
+ *                   ARROWS CREATION AND CONTROLS             *
+ ********************************************************************/
 function showArrowControls(lineArrow, e) {
   // Rimuovi controlli esistenti
 
@@ -705,7 +748,9 @@ function createArrow(x, y) {
     }
   });
 }
-
+/********************************************************************
+ *                     LINK CREATION AND POSITION CHECKING              *
+ ********************************************************************/
 const connections = []; // Array di collegamenti {from, to, line}
 function deleteLine(div) {
   connections
@@ -823,7 +868,9 @@ function updateConnectionsForShape(div) {
   });
 }
 
-// Fast map function
+/********************************************************************
+ *                     FAST MAP TO CREATE MORE SHAPES               *
+ ********************************************************************/
 const fastBtn = document.getElementById("fastMap");
 
 const fastMapCard = document.getElementById("fastMapCard");
@@ -851,7 +898,7 @@ confirmFastMapBtn.addEventListener("click", () => {
   if (numBoxes > 12) {
     numBoxes = 12;
     Toastify({
-      text: "Quantita massima quadrati: 12",
+      text: "Max squares number: 12",
       duration: 2500,
       gravity: "top", // top o bottom
       position: "left", // left, center, right
@@ -864,7 +911,7 @@ confirmFastMapBtn.addEventListener("click", () => {
   if (numRectangles > 9) {
     numRectangles = 9;
     Toastify({
-      text: "Quantita massima rettangoli: 9",
+      text: "Max rectangles number: 9",
       duration: 2500,
       gravity: "top", // top o bottom
       position: "left", // left, center, right
@@ -877,7 +924,7 @@ confirmFastMapBtn.addEventListener("click", () => {
   if (numCircles > 12) {
     numCircles = 9;
     Toastify({
-      text: "Quantita massima cerchi: 9",
+      text: "Max circles number: 9",
       duration: 2500,
       gravity: "top", // top o bottom
       position: "left", // left, center, right
@@ -908,23 +955,15 @@ confirmFastMapBtn.addEventListener("click", () => {
 });
 
 // MAGIC MAP
-const modelCards = document.querySelectorAll(".modelCard");
+/********************************************************************
+ *                     MAGIC MAP SECTION               *
+ ********************************************************************/
 const magicBtnHome = document.getElementById("magicBtnHome");
 const textarea = document.getElementById("magicText");
 magicBtnHome.addEventListener("click", () => {
   showSection("mainPage");
-  modelCards.forEach((card) => {
-    card.classList.remove("active");
-  });
-  textarea.value = "";
-});
 
-modelCards.forEach((card) => {
-  card.addEventListener("click", () => {
-    modelCards.forEach((c) => c.classList.remove("active"));
-    card.classList.add("active");
-    console.log("Modello selezionato:", card.dataset.model);
-  });
+  textarea.value = "";
 });
 
 //Create magic map
@@ -932,12 +971,18 @@ modelCards.forEach((card) => {
 const createMagicBtn = document.getElementById("magicCardBtn");
 createMagicBtn.addEventListener("click", () => {
   checkCard();
-  cleanMagicMap();
-  modelCards.forEach((card) => {
-    card.classList.remove("active");
-  });
-  textarea.value = "";
 });
+
+const loadingText = document.getElementById("logger");
+let messages = [
+  "Analyzing the text...",
+  "Extracting the main concepts...",
+  "Creating the connections...",
+  "Generating the map...",
+];
+
+let msgIndex = 0;
+let intervalId;
 
 function checkCard() {
   function createToast(text, color) {
@@ -953,35 +998,40 @@ function checkCard() {
     }).showToast();
   }
 
-  let modelValue = null;
   const textValue = textarea.value.trim();
 
-  modelCards.forEach((model) => {
-    if (model.classList.contains("active")) {
-      modelValue = model.id;
-    }
-  });
-
-  if (!modelValue && !textValue) {
-    createToast("Inserisci testo e seleziona modello", "red");
-    return;
-  } else if (!modelValue && textValue) {
-    createToast("Seleziona modello", "red");
-
-    return;
-  } else if (modelValue && !textValue) {
-    createToast("Inserisci testo", "red");
+  if (!textValue) {
+    createToast("Insert text", "red");
     return;
   }
 
-  sendToGemini(textValue, modelValue);
+  sendToGemini(textValue, "radiale");
 }
-
+/********************************************************************
+ *                      REQUEST TO GEMINI            *
+ ********************************************************************/
 async function sendToGemini(text, mapType) {
+  createMagicBtn.disabled = true;
+  myButton.style.opacity = "0.5"; // rende il bottone più chiaro
+
   console.log("[INFO] Invio richiesta a Gemini");
   console.log("[INFO] Testo inviato:", text);
   console.log("[INFO] Tipo mappa:", mapType);
 
+  msgIndex = 0;
+  loadingText.textContent = messages[msgIndex];
+  intervalId = setInterval(() => {
+    msgIndex++;
+    if (msgIndex < messages.length) {
+      loadingText.textContent = messages[msgIndex];
+    } else {
+      // arriva all'ultimo messaggio e si ferma qui
+      clearInterval(intervalId);
+      // opzionale: lascia l'ultimo messaggio visibile finché arriva la risposta
+      msgIndex = messages.length - 1;
+      loadingText.textContent = messages[msgIndex];
+    }
+  }, 2000);
   try {
     const response = await fetch(
       "https://conceptmap-pro.onrender.com/generateMap",
@@ -1005,17 +1055,28 @@ async function sendToGemini(text, mapType) {
 
     const data = await response.json();
     console.log("[INFO] JSON ricevuto dal server:", data);
+    clearInterval(intervalId);
+    loadingText.textContent = "";
+    msgIndex = 0;
+    createMagicBtn.disabled = false;
+    myButton.style.opacity = "1";
 
     // Mostra la sezione della mappa
+    cleanMagicMap();
+
+    textarea.value = "";
     showSection("magicMap");
 
     // Qui puoi passare direttamente l'array ricevuto dal server
     createMagicMap(data, mapType);
   } catch (err) {
     console.error("[ERROR] Errore durante sendToGemini:", err);
+    clearInterval(intervalId);
+    loadingText.textContent = "";
+    msgIndex = 0;
 
     Toastify({
-      text: "Errore nella generazione della mappa",
+      text: "An error occurred while generating the map",
       duration: 2500,
       gravity: "top",
       position: "left",
@@ -1024,6 +1085,8 @@ async function sendToGemini(text, mapType) {
         fontFamily: "'Poppins', sans-serif",
       },
     }).showToast();
+    cleanMagicMap();
+    showSection("magicMapPage");
   }
 }
 const homeFromMagic = document.getElementById("homeFromMagic");
@@ -1046,7 +1109,9 @@ function cleanMagicMap() {
         "
       ></svg>`;
 }
-
+/********************************************************************
+ *                      RESPONSE TAKEN AND STARTING MAP CREATION              *
+ ********************************************************************/
 function createMagicMap(prompt, modelType) {
   if (modelType.trim() === "radiale") {
     createMagicRadialShape("circle", prompt[0], prompt.length);
@@ -1062,129 +1127,14 @@ function createMagicMap(prompt, modelType) {
     requestAnimationFrame(() => {
       createRadialLink(magicRadialShape);
     });
-  } else if (modelType.trim() === "lineare") {
-    for (let i = 0; i < prompt.length; i++) {
-      const element = prompt[i].split(" ");
-
-      if (element.length > 2) {
-        createMagicLinearShape("rectangle", prompt[i]);
-      } else {
-        createMagicLinearShape("box", prompt[i]);
-      }
-    }
-  }
-}
-let initialX = 100;
-let initialY = 200;
-let larghezza = window.innerWidth;
-window.addEventListener("resize", () => {
-  larghezza = window.innerWidth;
-});
-
-let goLeft = false;
-let linearShape = [];
-function createMagicLinearShape(classe, text) {
-  const div = document.createElement("div");
-  div.classList.add(classe, "magicDiv");
-  div.textContent = text;
-  div.style.left = initialX + "px";
-  div.style.top = initialY + "px";
-  magicMap.appendChild(div);
-  linearShape.push(div);
-
-  checkPosition();
-  createLinearLink();
-}
-function checkPosition() {
-  console.log(initialY);
-  if (initialY >= 400) {
-    goLeft = true;
-  }
-  if (initialX > larghezza - 400 && !goLeft) {
-    initialY += 200;
-  }
-
-  if (initialX < larghezza - 400 && initialY <= 300) {
-    initialX += 200;
-  }
-
-  if (goLeft) {
-    initialX -= 200;
-  }
-}
-function createLinearLink() {
-  const svg = document.getElementById("magicConnections");
-
-  // Pulisce le linee precedenti
-  svg.innerHTML = "";
-
-  for (let i = 0; i < linearShape.length - 1; i++) {
-    const n1 = linearShape[i].getBoundingClientRect();
-    const n2 = linearShape[i + 1].getBoundingClientRect();
-
-    // Calcolo centri
-    const c1x = n1.left + n1.width / 2 + window.scrollX;
-    const c1y = n1.top + n1.height / 2 + window.scrollY;
-    const c2x = n2.left + n2.width / 2 + window.scrollX;
-    const c2y = n2.top + n2.height / 2 + window.scrollY;
-
-    const dx = c2x - c1x;
-    const dy = c2y - c1y;
-
-    let x1, y1, x2, y2;
-
-    if (Math.abs(dx) > Math.abs(dy)) {
-      // più lontani in orizzontale → collega destro con sinistro
-      if (dx > 0) {
-        // n2 è a destra di n1
-        x1 = n1.right + window.scrollX;
-        y1 = c1y;
-        x2 = n2.left + window.scrollX;
-        y2 = c2y;
-      } else {
-        // n2 è a sinistra di n1
-        x1 = n1.left + window.scrollX;
-        y1 = c1y;
-        x2 = n2.right + window.scrollX;
-        y2 = c2y;
-      }
-    } else {
-      // più lontani in verticale → collega sotto con sopra
-      if (dy > 0) {
-        // n2 è sotto n1
-        x1 = c1x;
-        y1 = n1.bottom + window.scrollY;
-        x2 = c2x;
-        y2 = n2.top + window.scrollY;
-      } else {
-        // n2 è sopra n1
-        x1 = c1x;
-        y1 = n1.top + window.scrollY;
-        x2 = c2x;
-        y2 = n2.bottom + window.scrollY;
-      }
-    }
-
-    // Crea linea SVG
-    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line.setAttribute("x1", x1);
-    line.setAttribute("y1", y1);
-    line.setAttribute("x2", x2);
-    line.setAttribute("y2", y2);
-    line.setAttribute("stroke", "black");
-    line.setAttribute("stroke-width", "2");
-
-    svg.appendChild(line);
   }
 }
 
 let magicRadialShape = [];
-let radius = 300;
+
 let nodeIndex = 0;
 function createMagicRadialShape(classe, text, maxLenght) {
-  if (maxLenght > 12) {
-    radius = 350;
-  }
+  let localRadius = maxLenght > 12 ? 350 : 300;
 
   const allDiv = document.querySelectorAll(".magicDiv");
   const div = document.createElement("div");
@@ -1211,8 +1161,8 @@ function createMagicRadialShape(classe, text, maxLenght) {
     const totalNodesAround = maxLenght - 1; // numero massimo nodi per cerchio
     const angle = (2 * Math.PI * nodeIndex) / totalNodesAround;
 
-    const x = centerX + radius * Math.cos(angle) - childWidth / 2;
-    const y = centerY + radius * Math.sin(angle) - childHeight / 2;
+    const x = centerX + localRadius * Math.cos(angle) - childWidth / 2;
+    const y = centerY + localRadius * Math.sin(angle) - childHeight / 2;
 
     div.style.left = `${x}px`;
     div.style.top = `${y}px`;
@@ -1229,9 +1179,10 @@ function createRadialLink(nodesArray) {
 
   const centralDiv = nodesArray[0];
   const centralRect = centralDiv.getBoundingClientRect();
-  const centralX = centralRect.left + centralRect.width / 2;
-  const centralY = centralRect.top + centralRect.height / 2;
-
+  const rectContainer = magicMap.getBoundingClientRect();
+  const centralX =
+    centralRect.left + centralRect.width / 2 - rectContainer.left;
+  const centralY = centralRect.top + centralRect.height / 2 - rectContainer.top;
   for (let i = 1; i < nodesArray.length; i++) {
     const node = nodesArray[i];
     const nodeRect = node.getBoundingClientRect();
@@ -1283,14 +1234,13 @@ function createRadialLink(nodesArray) {
     svg.appendChild(line);
   }
 }
+/********************************************************************
+ *                       SCREENSHOT MAGIC MAP              *
+ ********************************************************************/
 const uploadMagicMap = document.getElementById("uploadMagicMap");
 
 uploadMagicMap.addEventListener("click", () => {
   // Rimuovi le ombre temporaneamente
-  magicMap.querySelectorAll(".magicDiv").forEach((el) => {
-    el.dataset.oldShadow = el.style.boxShadow;
-    el.style.boxShadow = "none";
-  });
 
   html2canvas(magicMap).then((canvas) => {
     const link = document.createElement("a");
@@ -1299,8 +1249,5 @@ uploadMagicMap.addEventListener("click", () => {
     link.click();
 
     // Ripristina le ombre
-    magicMap.querySelectorAll(".magicDiv").forEach((el) => {
-      el.style.boxShadow = el.dataset.oldShadow;
-    });
   });
 });
