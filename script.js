@@ -1143,16 +1143,26 @@ function cleanMagicMap() {
  ********************************************************************/
 function createMagicMap(prompt, modelType) {
   if (modelType.trim() === "radiale") {
-    createMagicRadialShape("circle", prompt[0], prompt.length);
-    for (let i = 1; i < prompt.length; i++) {
-      const element = prompt[i].split(" ");
+    // Primo elemento come nodo principale
+    const mainNode = Array.isArray(prompt[0])
+      ? prompt[0].join(", ")
+      : prompt[0];
+    createMagicRadialShape("circle", mainNode, prompt.length);
 
-      if (element.length > 2) {
-        createMagicRadialShape("rectangle", prompt[i], prompt.length);
+    for (let i = 1; i < prompt.length; i++) {
+      // Trasforma l'elemento in stringa se è un array
+      const elementStr = Array.isArray(prompt[i])
+        ? prompt[i].join(", ")
+        : prompt[i];
+      const elementParts = elementStr.split(" "); // ora funziona sempre
+
+      if (elementParts.length > 2) {
+        createMagicRadialShape("rectangle", elementStr, prompt.length);
       } else {
-        createMagicRadialShape("box", prompt[i], prompt.length);
+        createMagicRadialShape("box", elementStr, prompt.length);
       }
     }
+
     requestAnimationFrame(() => {
       createRadialLink(magicRadialShape);
     });
