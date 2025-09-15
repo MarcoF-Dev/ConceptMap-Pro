@@ -1163,7 +1163,12 @@ let magicRadialShape = [];
 
 let nodeIndex = 0;
 function createMagicRadialShape(classe, text, maxLenght) {
-  let localRadius = maxLenght > 12 ? 350 : 300;
+  let localRadius;
+  if (window.innerWidth <= 768) {
+    localRadius = 100;
+  } else {
+    localRadius = 300;
+  }
 
   const allDiv = document.querySelectorAll(".magicDiv");
   const div = document.createElement("div");
