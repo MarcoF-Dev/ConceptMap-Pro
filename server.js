@@ -21,13 +21,15 @@ function buildPrompt(text, mapType) {
       return `Crea un **array JSON puro** contenente solo gli elementi principali del testo. 
 Il primo elemento deve essere l'elemento centrale, seguito dagli altri elementi collegati ad esso. 
 Rispondi **solo** con l'array, senza oggetti, chiavi o spiegazioni. 
-Non inserire prefissi tipo "javascript\\n" o json. ogni elemento deve contenere 2-3 parole non troppo lunghe, fai un massimo di 13 elementi
+Non inserire prefissi tipo "javascript\\n" o json. ogni elemento deve contenere 3-4 parole che riassumano i concetti principali
+,massimo 13 elementi, se il testo non è in italiano rispondi in inglese
 Testo: ${text}`;
 
     case "lineare":
       return `Crea un **array JSON puro** contenente solo gli elementi principali del testo, collegati in sequenza. 
 Rispondi **solo** con l'array, senza oggetti, chiavi o spiegazioni. 
-Non inserire prefissi tipo "javascript\\n" o json. ogni elemento deve contenere 2-3 parole non troppo lunghe, fai un massimo di 13 elementi
+Non inserire prefissi tipo "javascript\\n" o json. ogni elemento deve contenere 3-4 parole che riassumano i concetti principali
+,massimo 13 elementi, se il testo non è in italiano rispondi in inglese
 Testo: ${text}`;
     default:
       return text;

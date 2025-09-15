@@ -1,4 +1,33 @@
 /********************************************************************
+ *                       EMAIL SPAN ID            *
+ ********************************************************************/
+document.getElementById("copyEmail").addEventListener("click", () => {
+  navigator.clipboard
+    .writeText("marcofavara.dev@gmail.com")
+    .then(() => {
+      Toastify({
+        text: "Email copiata negli appunti!",
+        duration: 3000,
+        close: true,
+        gravity: "top", // top o bottom
+        position: "center", // left, center, right
+        backgroundColor: "#2563eb",
+        stopOnFocus: true, // ferma il timeout se il mouse è sopra
+      }).showToast();
+    })
+    .catch(() => {
+      Toastify({
+        text: "Copia non riuscita",
+        duration: 3000,
+        close: true,
+        gravity: "top",
+        position: "center",
+        backgroundColor: "#e02424",
+        stopOnFocus: true,
+      }).showToast();
+    });
+});
+/********************************************************************
  *                       CHANGE SECTION WITH BTN                *
  ********************************************************************/
 manualBtn = document.getElementById("manualBtn");

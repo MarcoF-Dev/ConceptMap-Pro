@@ -68,32 +68,45 @@ section {
   align-items: center;
 }
 
-#mainPage .starterBtn {
-  min-width: 84px;
-  padding: 0.625rem 1.25rem;
+/* Bottone Email */
+#copyEmail {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* spazio tra icona e testo */
+  min-width: 100px;
   height: 40px;
+  padding: 0.625rem 1.25rem;
   background-color: #2563eb;
-
-  font-weight: 400;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
   font-size: 1rem;
   border: none;
   border-radius: 6px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: background-color 0.2s;
-  font-family: "Poppins", sans-serif;
+  transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
 }
 
-#mainPage .starterBtn:hover {
+#copyEmail:hover {
   background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
-.starterBtn a {
+
+#copyEmail span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit; /* mantiene il colore del bottone */
   text-decoration: none;
-  color: white;
+  gap: 6px;
 }
-.starterBtn a:active {
-  text-decoration: none;
+
+#copyEmail span i {
+  font-size: 1.2rem; /* dimensione icona */
 }
+
 .nav-actions > a {
   display: inline-flex;
   align-items: center;
@@ -104,7 +117,7 @@ section {
   border-radius: 50%;
   background-color: transparent;
   color: #333;
-  font-size: 20px;
+  font-size: 30px;
   text-decoration: none;
   cursor: pointer;
 
@@ -806,7 +819,6 @@ span[class$="-icon"]:hover,
 /* MAGIC MAP */
 
 #magicMapPage {
-  position: relative;
   height: calc(100vh- 1rem);
 }
 #headerMagic {
@@ -957,3 +969,136 @@ span[class$="-icon"]:hover,
   align-items: center;
   text-align: center;
 }
+/* RESPONSIVE TELEFONO */
+/* =============================
+   RESPONSIVE SOLO TELEFONO
+============================= */
+
+/* Telefoni medi e piccoli */
+@media (max-width: 768px) {
+  /* HEADER */
+  #mainPage .header {
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    gap: 8px;
+  }
+  #mainPage #logo {
+    height: 50px;
+  }
+  #mainPage .logo h2 {
+    font-size: 1rem;
+  }
+  #mainPage .starterBtn {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    height: 36px;
+  }
+  .nav-actions {
+    gap: 64px;
+  }
+  .nav-actions > a {
+    width: 32px;
+    height: 32px;
+    font-size: 32px;
+  }
+  #copyEmail {
+    font-size: 0.9rem;
+    padding: 3px 6px;
+  }
+
+  /* MAIN HERO */
+  .hero {
+    padding: 20px;
+    min-height: 350px;
+    border-radius: 12px;
+  }
+  .hero-content h1 {
+    font-size: 1.75rem;
+  }
+  .hero-content p {
+    font-size: 0.95rem;
+  }
+  .hero-buttons {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+  .hero-buttons button,
+  .hero-buttons .btn-magic,
+  .hero-buttons .btn-secondary {
+    width: 100%;
+    font-size: 1rem;
+    height: 44px;
+  }
+
+  /* MAGIC MAP */
+
+  #magicCard {
+    width: 95%;
+    padding: 16px;
+  }
+  #magicCard h2 {
+    font-size: 1.25rem;
+  }
+  #magicText {
+    min-height: 300px;
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+  #magicBtnHome {
+    top: auto; /* annullo il top */
+    bottom: 0;
+  }
+
+  /* MANUAL MAP */
+  #manualMapPage header h1,
+  #magicMapPage h1 {
+    font-size: 1.5rem;
+  }
+  #manualMapPage header .subtitle,
+  #magicMapPage .subtitle {
+    font-size: 1.1rem;
+  }
+  #drawSection {
+    width: calc(100vw - 60px);
+    height: calc(100vh - 6rem);
+    margin-left: 60px;
+  }
+  #fastMap {
+    top: auto;
+    right: auto;
+    bottom: 1rem;
+    left: 5rem;
+  }
+  .box,
+  .circle {
+    min-height: 50px;
+    min-width: 50px;
+  }
+  .rectangle {
+    min-height: 50px;
+    min-width: 100px;
+  }
+  /* Sidebar */
+  #sidebar {
+    width: 60px;
+  }
+  .sidebarIcon,
+  #uploadIcon {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+  }
+
+  /* Footer */
+  #mainPage .footer {
+    padding: 20px 10px;
+    gap: 16px;
+  }
+  #mainPage .footer p {
+    font-size: 0.85rem;
+  }
+}
+
+/* Telefoni molto piccoli */
