@@ -1165,7 +1165,7 @@ let nodeIndex = 0;
 function createMagicRadialShape(classe, text, maxLenght) {
   let localRadius;
   if (window.innerWidth <= 768) {
-    localRadius = 100;
+    localRadius = 250;
   } else {
     localRadius = 300;
   }
