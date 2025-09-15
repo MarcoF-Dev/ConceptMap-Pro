@@ -8,7 +8,7 @@ ConceptMap Pro is a powerful web app that turns your ideas into interactive conc
 
 With ConceptMap Pro, you can create maps **manually** or **automatically** using AI. Manual mode gives you full control over nodes, connections, and layout. AI-assisted mode analyzes your text and generates an initial map, which you can then refine manually.
 
-**⚠️ Note:** This app is currently designed for desktop use and is **not optimized for mobile devices**.
+**⚠️ Note:** The app is now **responsive**, but the concept map may **not be fully visible on mobile devices**. For the best experience, it is **recommended to use a desktop**, and once the map is created, press the **download button** to save it.
 
 ---
 
@@ -19,7 +19,7 @@ With ConceptMap Pro, you can create maps **manually** or **automatically** using
 - 🤖 **AI-assisted map generation**: Input text and get an initial concept map automatically.  
 - 🎨 **Interactive layout**: Drag and drop nodes, reduce overlaps, and adjust positioning.  
 - 💾 **Save & load**: Keep your maps in JSON format for later editing.  
-- 🖼️ **Export maps**: Save as images or SVG files.  
+- 🖼️ **Export maps**: Save as images or SVG files (especially recommended on desktop).  
 - ✏️ **Refine AI maps manually**: Combine AI insights with your personal touch.  
 
 ---
@@ -33,6 +33,4 @@ ConceptMap Pro is also a **learning exercise** designed to explore and practice 
 - Making **API calls** and handling **JSON responses** to generate AI-assisted maps.
 
 It’s a hands-on way to practice **DOM manipulation, data structures, event handling, and visualization**, while building a functional and visually appealing tool.
-
----
 
