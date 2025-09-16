@@ -1046,12 +1046,13 @@ span[class$="-icon"]:hover,
 #uploadMagicMap {
   bottom: 1rem;
 }
-.magicDiv {
+#magicMapContainer .magicDiv {
   padding: 0 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  min-height: 50px;
 }
 /* RESPONSIVE TELEFONO */
 /* =============================
