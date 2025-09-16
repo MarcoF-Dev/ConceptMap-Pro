@@ -18,18 +18,28 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 function buildPrompt(text, mapType) {
   switch (mapType) {
     case "radiale":
-      return `Crea un **array JSON puro** contenente solo gli elementi principali del testo. 
-Il primo elemento deve essere l'elemento centrale, seguito dagli altri elementi collegati ad esso. 
-Rispondi **solo** con l'array, senza oggetti, chiavi o spiegazioni. 
-Non inserire prefissi tipo "javascript\\n" o json. ogni elemento deve contenere 2-3 parole massimo che riassumano i concetti principali
-,massimo 13 elementi, se il testo è in inglese rispondi in inglese
+      return `Crea un array JSON PURO contenente solo i concetti principali del testo. 
+- Il primo elemento deve essere il concetto centrale.
+- Gli altri elementi devono essere concetti strettamente collegati al primo.
+- Ogni elemento deve avere 2-3 parole massimo.
+- Massimo 13 elementi.
+- Rispondi solo con l'array, SENZA chiavi, oggetti o spiegazioni.
+- NON inserire prefissi tipo "javascript" o "json".
+- SE IL TESTO è IN INGLESE RISPONDI CON ELEMENTI IN INGLESE!!!!.
+- Esemopio di array : [
+  "Renewable Energy",
+  "Solar Power",
+  "Wind Power",
+  "Hydroelectric Energy",
+  "Energy Storage",
+]
 Testo: ${text}`;
 
     case "lineare":
       return `Crea un **array JSON puro** contenente solo gli elementi principali del testo, collegati in sequenza. 
 Rispondi **solo** con l'array, senza oggetti, chiavi o spiegazioni. 
 Non inserire prefissi tipo "javascript\\n" o json. ogni elemento deve contenere 2-3 parole massimp che riassumano i concetti principali
-,massimo 13 elementi, se il testo è in inglese rispondi in inglese
+,massimo 13 elementi, se il testo è in inglese rispondi con elementi in inglese
 Testo: ${text}`;
     default:
       return text;

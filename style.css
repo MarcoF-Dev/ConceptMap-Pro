@@ -112,8 +112,8 @@ section {
   align-items: center;
   justify-content: center;
 
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background-color: transparent;
   color: #333;
@@ -219,20 +219,103 @@ section {
   gap: 16px;
   justify-content: center;
 }
-
-/* Footer */
-#mainPage .footer {
-  border-top: 1px solid #e4e4e7;
-  padding: 36px 16px;
+#responsiveAlert {
+  background: #ffe5e5; /* rosso chiaro di sfondo */
+  color: #cc0000; /* rosso intenso per il testo */
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+
+  font-size: 1rem;
+  padding: 1rem;
+  border: 1px solid #cc0000;
+  border-radius: 6px;
+  margin: 1rem auto;
+  max-width: 700px;
+  display: none;
+}
+#responsiveAlert.active {
+  display: inline-block;
 }
 
-#mainPage .footer p {
-  color: #71717a;
+div .mainH2 {
+  font-size: 2.8rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+.how-it-works {
+  padding: 3rem 1rem;
+}
+
+.steps {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.step {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  width: 260px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+}
+
+.step:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+.step i {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+  display: block;
+  color: #5b68ff;
+}
+
+.step h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.step p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Why Section */
+.why {
+  padding: 3rem 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.why h2 {
+  margin-bottom: 1rem;
+}
+
+.why p {
+  color: #555;
   font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Footer */
+footer {
+  color: #eee;
+  padding: 2rem 1rem;
+  margin-top: 2rem;
+}
+
+footer small {
+  display: block;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: #aaa;
+  text-align: center;
 }
 
 /* MANUAL MAP!!!!!!!!!! */
@@ -252,7 +335,8 @@ section {
   text-align: center;
 }
 #manualMapPage header .subtitle,
-#magicMapPage .subtitle {
+#magicMapPage .subtitle,
+.mainH2 {
   display: block;
 
   font-size: 1.35rem;
@@ -1030,74 +1114,6 @@ span[class$="-icon"]:hover,
     width: 100%;
     font-size: 1rem;
     height: 44px;
-  }
-
-  /* MAGIC MAP */
-
-  #magicCard {
-    width: 95%;
-    padding: 16px;
-  }
-  #magicCard h2 {
-    font-size: 1.25rem;
-  }
-  #magicText {
-    min-height: 300px;
-    font-size: 0.9rem;
-    padding: 10px;
-  }
-  #magicBtnHome {
-    top: auto; /* annullo il top */
-    bottom: 0;
-  }
-
-  /* MANUAL MAP */
-  #manualMapPage header h1,
-  #magicMapPage h1 {
-    font-size: 1.5rem;
-  }
-  #manualMapPage header .subtitle,
-  #magicMapPage .subtitle {
-    font-size: 1.1rem;
-  }
-  #drawSection {
-    width: calc(100vw - 60px);
-    height: calc(100vh - 6rem);
-    margin-left: 60px;
-  }
-  #fastMap {
-    top: auto;
-    right: auto;
-    bottom: 1rem;
-    left: 5rem;
-  }
-  .box,
-  .circle {
-    min-height: 50px;
-    min-width: 50px;
-  }
-  .rectangle {
-    min-height: 50px;
-    min-width: 100px;
-  }
-  /* Sidebar */
-  #sidebar {
-    width: 60px;
-  }
-  .sidebarIcon,
-  #uploadIcon {
-    width: 38px;
-    height: 38px;
-    font-size: 18px;
-  }
-
-  /* Footer */
-  #mainPage .footer {
-    padding: 20px 10px;
-    gap: 16px;
-  }
-  #mainPage .footer p {
-    font-size: 0.85rem;
   }
 }
 

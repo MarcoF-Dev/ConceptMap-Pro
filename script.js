@@ -49,15 +49,42 @@ function showSection(sectionId) {
 }
 
 magicBtn.addEventListener("click", () => {
+  if (magicBtn.disabled) {
+    return;
+  }
   showSection("magicMapPage");
 });
 manualBtn.addEventListener("click", () => {
+  if (manualBtn.disabled) {
+    return;
+  }
   showSection("manualMapPage");
   cleanDrawingSection();
 });
 homeBtn.addEventListener("click", () => {
   showSection("mainPage");
 });
+
+const alertText = document.getElementById("responsiveAlert");
+window.addEventListener("resize", checkWindowWidth);
+checkWindowWidth();
+
+function checkWindowWidth() {
+  if (window.innerWidth <= 768) {
+    alertText.classList.add("active");
+    setButtonState(false); // disabilita bottoni
+  } else {
+    alertText.classList.remove("active");
+    setButtonState(true); // abilita bottoni
+  }
+}
+
+function setButtonState(enabled) {
+  manualBtn.disabled = !enabled;
+  magicBtn.disabled = !enabled;
+  manualBtn.style.opacity = enabled ? 1 : 0.5;
+  magicBtn.style.opacity = enabled ? 1 : 0.5;
+}
 
 /********************************************************************
  *                      MANUAL DRAWING SECTION AND ICONS             *
