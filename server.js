@@ -21,11 +21,12 @@ function buildPrompt(text, mapType) {
       return `Crea un array JSON PURO contenente solo i concetti principali del testo. 
 - Il primo elemento deve essere il concetto centrale.
 - Gli altri elementi devono essere concetti strettamente collegati al primo.
-- Ogni elemento deve avere 2-3 parole massimo.
+- Ogni elemento deve avere 2-3 parole che riassumino le parti fondamentali.
 - Massimo 13 elementi.
 - Rispondi solo con l'array, SENZA chiavi, oggetti o spiegazioni.
 - NON inserire prefissi tipo "javascript" o "json".
 - SE IL TESTO è IN INGLESE RISPONDI CON ELEMENTI IN INGLESE!!!!.
+- SE IL TESTO è IN ITALIANO RISPONDI CON ELEMENTI IN ITALIANO!!!!.
 - Esemopio di array : [
   "Renewable Energy",
   "Solar Power",
