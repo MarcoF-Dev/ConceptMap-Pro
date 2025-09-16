@@ -25,8 +25,7 @@ function buildPrompt(text, mapType) {
 - Massimo 13 elementi.
 - Rispondi solo con l'array, SENZA chiavi, oggetti o spiegazioni.
 - NON inserire prefissi tipo "javascript" o "json".
-- SE IL TESTO è IN INGLESE RISPONDI CON ELEMENTI IN INGLESE!!!!.
-- SE IL TESTO è IN ITALIANO RISPONDI CON ELEMENTI IN ITALIANO!!!!.
+
 - Esemopio di array : [
   "Renewable Energy",
   "Solar Power",
@@ -34,6 +33,7 @@ function buildPrompt(text, mapType) {
   "Hydroelectric Energy",
   "Energy Storage",
 ]
+  Lingua: Rispondi esattamente nella stessa lingua del testo.
 Testo: ${text}`;
 
     case "lineare":
