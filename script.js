@@ -1212,6 +1212,7 @@ function createMagicRadialShape(classe, text, maxLenght) {
   div.classList.add(classe, "magicDiv");
   div.textContent = text;
   magicMap.appendChild(div);
+  div.style.minHeight = "50px";
 
   const rect = magicMap.getBoundingClientRect();
   const containerWidth = rect.width;
